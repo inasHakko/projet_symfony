@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% for msg in app.session.flashBag.get('info') %}
+    <div class="alert alert-info" role="alert">
+        {{msg}}
+    </div>
+{% endfor %}
+
+{% for msg in app.session.flashBag.get('error') %}
+    <div class="alert alert-danger" role="alert">
+        {{msg}}
+    </div>
+{% endfor %}
+
+{% for msg in app.session.flashBag.get('success') %}
+    <div class="alert alert-success" role="alert">
+        {{msg}}
+    </div>
+{% endfor %}
+
+<ul class="list-group">
+    {% for cle,value in app.session.get('todos') %}
+        <li class="list-group-item">{{cle}} : {{value}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
