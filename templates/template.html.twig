@@ -7,7 +7,7 @@
     <meta name="description" content="Description de la page ou du projet" />
     <meta name="author" content="Nom de l'auteur ou de l'équipe" />
     <title>Static Navigation - SB Admin</title>
-    <link rel="stylesheet" href="{{ asset('assets/styles/css/styles.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/styles/css/style.css') }}" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
 </head>
@@ -56,8 +56,8 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="">Static Navigation</a>
-                                    <a class="nav-link" href="">Light Sidenav</a>
+                                    <a class="nav-link" href=" {{path('app_todo')}}">Tâches</a>
+                                    {# <a class="nav-link" href="">Light Sidenav</a> #}
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">

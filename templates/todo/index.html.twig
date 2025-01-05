@@ -1,5 +1,5 @@
-{% extends 'base.html.twig' %}
-{% block body %}
+{% extends 'template.html.twig' %}
+{% block content %}
 {% for msg in app.session.flashBag.get('info') %}
     <div class="alert alert-info" role="alert">
         {{msg}}
