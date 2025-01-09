@@ -62,6 +62,9 @@ class Personne
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->taches = new ArrayCollection();
@@ -223,5 +226,17 @@ class Personne
     {
         dump('onPreUpdate called');
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }
