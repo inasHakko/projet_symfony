@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TodoController extends AbstractController
 {
-    #[Route('/todo', name: 'app_todo')]
+    #[Route('/todo', name: 'app_todo_list')]
     public function index(Request $request): Response
     {
         $session=$request->getSession();
@@ -21,9 +21,7 @@ class TodoController extends AbstractController
             ];
             $session->set('todos',$todos);
         }
-        return $this->render('todo/index.html.twig', [
-            'controller_name' => 'TodoController',
-        ]);
+        return $this->render('todo/index.html.twig');
     }
 
     #[Route('/todo/add/{cle}/{value}', name: 'app_todo_add')]

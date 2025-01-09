@@ -14,7 +14,7 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         // Exemple de création d'une entité
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $personne = new Personne();
             $personne->setFirstname($faker->firstName);
             $personne->setName($faker->lastName);

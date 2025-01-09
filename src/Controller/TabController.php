@@ -16,7 +16,7 @@ class TabController extends AbstractController
         ]);
     }
 
-    #[Route('/tab/users', name: 'app_tab')]
+    #[Route('/tab/users', name: 'app_tab_users')]
     public function users(): Response{
         $users = [
             ['name' => 'Alice', 'email' => 'alice@example.com', 'age' => 12],
