@@ -38,11 +38,19 @@ class PersonneFormType extends AbstractType
                 'class' => Tache::class,
                 'choice_label' => 'nameTask',
                 'multiple' => true,
+                'required' => false,
+                'attr' => [
+                    'class' => 'select2',
+                ]
             ])
             ->add('competences', EntityType::class, [
                 'class' => Competence::class,
                 'choice_label' => 'nameCompetence',
                 'multiple' => true,
+                'required' => false,
+                'attr' => [
+                    'class' => 'select2',
+                ]
             ])
             ->add('photo', FileType::class, [
                 'label' => 'votre image de profile (fichier image uniquement)',

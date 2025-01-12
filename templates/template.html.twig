@@ -8,7 +8,9 @@
     <meta name="author" content="Nom de l'auteur ou de l'équipe" />
     <title>Static Navigation - SB Admin</title>
     <link rel="stylesheet" href="{{ asset('assets/styles/css/style.css') }}" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="{{asset('node_modules/select2/dist/js/select2.min.js')}}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
 
 </head>
 
@@ -149,5 +151,15 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{{ asset('assets/styles/js/scripts.js') }}"></script>
+        <script src="{{ asset('node_modules/jquery/dist/jquery.min.js')}}"></script>
+        <script src="{{ asset('node_modules/select2/dist/js/select2.min.js')}}"></script>
+        <script src="{{ asset('node_modules/select2/dist/js/select2.full.min.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        {% block javascripts %} {% endblock %}
+
     </body>
 </html>

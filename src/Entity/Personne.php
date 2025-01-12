@@ -9,10 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
+    #[ORM\HasLifecycleCallbacks()]
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
@@ -20,18 +22,47 @@ class Personne
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min:3,
+        max:50,
+        minMessage:"Le prénom d'utilisateur doit contenir au moins {{ limit }} caractères.",
+        maxMessage:"Le prénom d'utilisateur ne peut pas contenir plus de {{ limit }} caractères."
+        )]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min:3,
+        max:50,
+        minMessage:"Le nom d'utilisateur doit contenir au moins {{ limit }} caractères.",
+        maxMessage:"Le nom d'utilisateur ne peut pas contenir plus de {{ limit }} caractères."
+        )]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "L'âge est obligatoire.")]
+    #[Assert\Positive(message: "L'âge doit être un nombre positif.")]
+    #[Assert\Range(
+        min: 18,
+        max: 99,
+        notInRangeMessage: "L'âge doit être compris entre {{ min }} et {{ max }} ans."
+    )]
     private ?int $age = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min:5,
+        max:50,
+        minMessage:"Le job d'utilisateur doit contenir au moins {{ limit }} caractères.",
+        maxMessage:"Le job d'utilisateur ne peut pas contenir plus de {{ limit }} caractères."
+        )]
     private ?string $job = null;
 
     #[ORM\OneToOne(inversedBy: 'personne', cascade: ['persist', 'remove'])]
@@ -212,16 +243,18 @@ class Personne
     /**
      * @ORM\PrePersist()
      */
+    #[ORM\PrePersist()]
     public function onPrePersist(): void
     {
         dump('onPrePersist called');
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTime();
     }
 
     /**
      * @ORM\PreUpdate()
      */
+    #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
         dump('onPreUpdate called');

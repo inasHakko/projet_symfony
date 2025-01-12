@@ -16,11 +16,21 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\Helpers;
+use App\Service\UploaderService;
+use Psr\Log\LoggerInterface;
+use App\Service\MailerService;
 
 class PersonneController extends AbstractController
 {
+    // private $logger;
+    public function __construct(private LoggerInterface $logger, private Helpers $helpers){
+
+    }
+
+
     #[Route('/add', name: 'app_personne_add')]
-    public function addPersonne(ManagerRegistry $doctrine, Request $request, SluggerInterface $slugger): Response
+    public function addPersonne(ManagerRegistry $doctrine, Request $request, UploaderService $uploader): Response
     {
         $personne = new Personne(); 
         $form = $this->createForm(PersonneFormType::class, $personne);
@@ -29,7 +39,7 @@ class PersonneController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted())
+        if ($form->isSubmitted() && $form->isValid())
         {
             /** @var UploadedFile $brochureFile */
             $photo = $form->get('photo')->getData();
@@ -37,23 +47,8 @@ class PersonneController extends AbstractController
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
             if ($photo) {
-                $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$photo->guessExtension();
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $photo->move(
-                        $this->getParameter('personne_directory'),
-                        $newFilename);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-                $personne->setImage($newFilename);
+                $directory = $this->getParameter('personne_directory');
+                $personne->setImage($uploader->uploadFile($photo,$directory));
             }
             $entityManager = $doctrine->getManager();
             $entityManager->persist($personne);
@@ -69,13 +64,14 @@ class PersonneController extends AbstractController
     {
         // $repository = $doctrine->getRepository(Personne::class);
         // dd($repository);
+        
         $personnes = $repository->findByAge($ageMin, $ageMax);
 
         return $this->render('personne/listePersonne.html.twig', ['personnes' => $personnes]); 
     }
 
     #[Route('/edit/{id?0}', name: 'app_personne_edit')]
-    public function editPersonne(ManagerRegistry $doctrine, Request $request, Personne $personne = null, $id ): Response
+    public function editPersonne(ManagerRegistry $doctrine, Request $request, Personne $personne = null, $id , MailerService $mailer): Response
     {
         $entityManager = $doctrine->getManager();
         $newPersonne = false;
@@ -84,25 +80,29 @@ class PersonneController extends AbstractController
             $newPersonne = true;
             $personne = new Personne();
         }
-        
-        // $personne = new Personne(); 
+        // $personne = new Personne();
         $form = $this->createForm(PersonneFormType::class, $personne);
         $form->remove('createdAt');
         $form->remove('updatedAt');
         $form->handleRequest($request);
 
-        if ($form->isSubmitted())
+        if ($form->isSubmitted() && $form->isValid())
         {
             $entityManager->persist($personne);
             $entityManager->flush();
+
             if($newPersonne){
                 $personne->setCreatedAt(new \DateTimeImmutable());
                 $personne->setUpdatedAt(new \DateTime());
-                $this->addFlash('success', "personne has been added successfully");
+                $message = "personne has been added successfully";
+                $this->addFlash('success', $message);
             }else{
                 $personne->setUpdatedAt(new \DateTime());
-                $this->addFlash('success', "personne has been updated successfully");
+                $message ="personne has been updated successfully";
+                $this->addFlash('success', $message);
             }
+            $mailMessage = $personne->getFirstname(). ' ' . $personne->getName(). ' ' .$message;
+            $mailer->sendEmail(content: $mailMessage);
             // $this->addFlash('success', 'La personne a été ajoutée avec succès!');
             return $this->redirectToRoute('app_personne_alls');
         }
@@ -144,6 +144,8 @@ class PersonneController extends AbstractController
 
         // Nombre total de personnes
         // $nbrPersonnes = $repository->count([]);
+        // $helpers = new Helpers();
+        // dd($this->helpers->sayCC());
         $personnes = $repository->findAll();
         $nbrPersonnes = count($personnes);
         $personnes = $repository->findBy([], [], $nbr, ($page - 1) * $nbr);
