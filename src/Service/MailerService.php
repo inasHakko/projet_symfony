@@ -10,10 +10,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MailerService
 {
-
-        public function __construct(private MailerInterface $mailer)
+    private $replayTo;
+        public function __construct(private MailerInterface $mailer, $replayTo)
         {
-
+            $this->replayTo = $replayTo;
         }
     public function sendEmail(
         $to = 'inas.hakkou2001@gmail.com',
@@ -21,12 +21,13 @@ class MailerService
         $subject = 'Time for Symfony Mailer!'
     ): void
     {
+        dd($this->replayTo);
         $email = (new Email())
             ->from('inass.hakkou2001@gmail.com')
             ->to($to)
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
+            ->replyTo($this->replayTo)
             //->priority(Email::PRIORITY_HIGH)
             ->subject($subject)
             ->text('Sending emails is fun again!')

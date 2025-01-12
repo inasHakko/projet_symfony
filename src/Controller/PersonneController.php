@@ -75,8 +75,9 @@ class PersonneController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $newPersonne = false;
-
+        // dd('edit');
         if (!$personne) {
+            // dd('personne existe pas');
             $newPersonne = true;
             $personne = new Personne();
         }
@@ -88,16 +89,19 @@ class PersonneController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            // dd('valid');
             $entityManager->persist($personne);
             $entityManager->flush();
 
             if($newPersonne){
                 $personne->setCreatedAt(new \DateTimeImmutable());
                 $personne->setUpdatedAt(new \DateTime());
+                // dd('new personne');
                 $message = "personne has been added successfully";
                 $this->addFlash('success', $message);
             }else{
                 $personne->setUpdatedAt(new \DateTime());
+                // dd('update personne');
                 $message ="personne has been updated successfully";
                 $this->addFlash('success', $message);
             }
