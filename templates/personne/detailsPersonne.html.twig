@@ -7,5 +7,8 @@
       <h3>{{personne.firstname}} {{personne.name}}</h3>
       <h5>{{personne.age}}</h5>
       <h6>{{personne.job}}</h6>
+      {% if app.user %}
+      <p>Created By : {{app.user.email()}}</p>
+      {% endif %}
     </div>
 {% endblock %}

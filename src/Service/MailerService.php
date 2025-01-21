@@ -16,14 +16,14 @@ class MailerService
             $this->replayTo = $replayTo;
         }
     public function sendEmail(
-        $to = 'inas.hakkou2001@gmail.com',
-        $content = '<p>See Twig integration for better HTML integration!</p>',
+        $to = 'inas.hakkou11@gmail.com',
+        $content = 'See Twig integration for better HTML integration!',
         $subject = 'Time for Symfony Mailer!'
-    ): void
+    )
     {
-        dd($this->replayTo);
+        // dd($this->replayTo);
         $email = (new Email())
-            ->from('inass.hakkou2001@gmail.com')
+            ->from('noreplaysymfony@gmail.com')
             ->to($to)
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
@@ -34,7 +34,29 @@ class MailerService
             ->html($content);
 
         $this->mailer->send($email);
-
+        return new Response('Email sent successfully');
         // ...
     }
+
+    // public function sendEmail(
+    //     string $to,
+    //     string $content,
+    //     string $subject = 'No subject'
+    // ): Response {
+    //     $email = (new Email())
+    //     ->from('noreplay_symfony@gmail.com')
+    //     ->to('inas.hakkou11@gmail.com')
+    //     ->subject('Test Email')
+    //     ->text('Ceci est un test pour vérifier l’envoi des emails.')
+    //     ->html('<p>Ceci est un test pour vérifier l’envoi des emails.</p>');
+
+    // try {
+    //     $this->mailer->send($email);
+    //     return new Response('Email envoyé avec succès.');
+    // } catch (\Exception $e) {
+    //     return new Response('Erreur : ' . $e->getMessage());
+    // }
+    // }
+
+
 }

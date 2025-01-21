@@ -20,18 +20,47 @@ use App\Service\Helpers;
 use App\Service\UploaderService;
 use Psr\Log\LoggerInterface;
 use App\Service\MailerService;
-
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use App\Entity\User;
+// use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use App\Event\AddPersonneEvent;
+use App\Event\ListAllPersonneEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class PersonneController extends AbstractController
 {
     // private $logger;
-    public function __construct(private LoggerInterface $logger, private Helpers $helpers){
+    public function __construct(private LoggerInterface $logger, private Helpers $helpers, private EventDispatcherInterface $dispatcher){
 
+    }
+
+    #[Route('/email', name: 'test_email')]
+    public function testEmail(MailerInterface $mailer): Response
+    {
+        $email = (new Email())
+            ->from('noreplaysymfony@gmail.com') // Adresse email de l'expéditeur
+            ->to('inas.hakkou11@gmail.com')     // Adresse email du destinataire
+            ->subject('Test Email depuis Symfony') // Sujet de l'email
+            ->text('Ceci est un test pour vérifier l’envoi des emails.');
+            // ->html('<p>Ceci est un test pour vérifier l’envoi des emails.</p>');
+
+        try {
+            $mailer->send($email);
+            return new Response('Email envoyé avec succès.');
+        } catch (\Exception $e) {
+            return new Response('Erreur lors de l’envoi de l’email : ' . $e->getMessage());
+        }
     }
 
 
     #[Route('/add', name: 'app_personne_add')]
     public function addPersonne(ManagerRegistry $doctrine, Request $request, UploaderService $uploader): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $personne = new Personne(); 
         $form = $this->createForm(PersonneFormType::class, $personne);
         $form->remove('createdAt');
@@ -50,6 +79,9 @@ class PersonneController extends AbstractController
                 $directory = $this->getParameter('personne_directory');
                 $personne->setImage($uploader->uploadFile($photo,$directory));
             }
+            $personne->setCreatedAt(new \DateTimeImmutable());
+            $personne->setUpdatedAt(new \DateTimeImmutable());
+            $personne->setCreatedBy($this->getUser());
             $entityManager = $doctrine->getManager();
             $entityManager->persist($personne);
             $entityManager->flush();
@@ -66,13 +98,14 @@ class PersonneController extends AbstractController
         // dd($repository);
         
         $personnes = $repository->findByAge($ageMin, $ageMax);
-
         return $this->render('personne/listePersonne.html.twig', ['personnes' => $personnes]); 
     }
 
     #[Route('/edit/{id?0}', name: 'app_personne_edit')]
-    public function editPersonne(ManagerRegistry $doctrine, Request $request, Personne $personne = null, $id , MailerService $mailer): Response
+    public function editPersonne(ManagerRegistry $doctrine, Request $request, Personne $personne = null , MailerService $mailer, EventDispatcherInterface $dispatcher): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $entityManager = $doctrine->getManager();
         $newPersonne = false;
         // dd('edit');
@@ -89,24 +122,35 @@ class PersonneController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            // dd('valid');
+            if($newPersonne){
+                $message = "personne has been added successfully";
+                $this->addFlash('success', $message);
+                $personne->setCreatedBy($this->getUser());
+                // $addPersonneEvent = new AddPersonneEvent($personne);
+                // dd($addPersonneEvent);
+                // $this->dispatcher->dispatch($addPersonneEvent, AddPersonneEvent::ADD_PERSONNE_EVENT);
+                // Dispatcher l'événement
+                // $addPersonneEvent = new AddPersonneEvent($personne);
+                // $dispatcher->dispatch($addPersonneEvent, AddPersonneEvent::ADD_PERSONNE_EVENT);
+            }else{
+                $message ="personne has been updated successfully";
+                $this->addFlash('success', $message);
+            }
             $entityManager->persist($personne);
             $entityManager->flush();
 
             if($newPersonne){
-                $personne->setCreatedAt(new \DateTimeImmutable());
-                $personne->setUpdatedAt(new \DateTime());
-                // dd('new personne');
-                $message = "personne has been added successfully";
-                $this->addFlash('success', $message);
-            }else{
-                $personne->setUpdatedAt(new \DateTime());
-                // dd('update personne');
-                $message ="personne has been updated successfully";
-                $this->addFlash('success', $message);
+                $addPersonneEvent = new AddPersonneEvent($personne);
+                $dispatcher->dispatch($addPersonneEvent, AddPersonneEvent::ADD_PERSONNE_EVENT);
             }
+
             $mailMessage = $personne->getFirstname(). ' ' . $personne->getName(). ' ' .$message;
-            $mailer->sendEmail(content: $mailMessage);
+            // $mailer->sendEmail(content: $mailMessage);
+            $mailer->sendEmail(
+                to: 'inas.hakkou11@gmail.com',
+                content: $mailMessage,
+                subject: 'Modification de la personne'
+            );
             // $this->addFlash('success', 'La personne a été ajoutée avec succès!');
             return $this->redirectToRoute('app_personne_alls');
         }
@@ -139,21 +183,16 @@ class PersonneController extends AbstractController
         return $this->render('personne/detailsPersonne.html.twig', ['personne' => $personne]);
     }
 
-    #[Route('/all/{page?1}/{nbr?12}', name: 'app_personne_alls')]
-    public function pagination(ManagerRegistry $doctrine, int $page, int $nbr): Response
+    #[Route('all/{page?1}/{nbr?12}', name: 'app_personne_alls')]
+    public function pagination(ManagerRegistry $doctrine, int $page, int $nbr, EventDispatcherInterface $dispatcher): Response
     {
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $repository = $doctrine->getRepository(Personne::class);
-
-        // Pagination : Récupérer les personnes
-
-        // Nombre total de personnes
-        // $nbrPersonnes = $repository->count([]);
-        // $helpers = new Helpers();
-        // dd($this->helpers->sayCC());
         $personnes = $repository->findAll();
         $nbrPersonnes = count($personnes);
+        $listAllPersonneEvent = new ListAllPersonneEvent($nbrPersonnes);
+        $this->dispatcher->dispatch($listAllPersonneEvent, ListAllPersonneEvent::LIST_ALL_PERSONNE_EVENT);
         $personnes = $repository->findBy([], [], $nbr, ($page - 1) * $nbr);
-
         // Calcul du nombre de pages
         $pages = ceil($nbrPersonnes / $nbr);
 
@@ -170,11 +209,14 @@ class PersonneController extends AbstractController
             'page' => $page,
             'nbre' => $nbr
         ]);
+        
+        
     }
 
     #[Route('/delete/{id}', name: 'app_personne_delete')]
     public function deletePersonne(ManagerRegistry $doctrine, $id): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $repository = $doctrine->getRepository(Personne::class);
         $personne = $repository->find($id);
         if (!$personne) {
@@ -193,6 +235,7 @@ class PersonneController extends AbstractController
     #[Route('/update/{id}/{firstname}/{name}/{age}/{job}', name: 'app_personne_update')]
     public function updatePersonne(ManagerRegistry $doctrine, $id, $firstname, $name, $age,$job): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $repository = $doctrine->getRepository(Personne::class);
         $personne = $repository->find($id);
         if (!$personne) {

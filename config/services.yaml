@@ -25,4 +25,12 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\MailerService:
         arguments:
-            $replayTo: 'inas.hakkou2001@gmail.com'
+            $replayTo: 'noreplaysymfony@gmail.com'
+
+    App\EventListener\PersonneListener:
+        public: true
+        tags:
+            - { name: kernel.event_listener, event: personne.add, method: onAddPersonneListener }
+            - { name: kernel.event_listener, event: personne.list_all, method: onListAllPersonneListener }
+
+
