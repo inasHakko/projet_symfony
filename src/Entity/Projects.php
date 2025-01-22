@@ -40,6 +40,9 @@ class Projects
     #[ORM\ManyToMany(targetEntity: ProfilUser::class, inversedBy: 'projects')]
     private Collection $users;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
 
     public function __construct()
     {
@@ -150,6 +153,18 @@ class Projects
     public function removeUser(ProfilUser $user): static
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
