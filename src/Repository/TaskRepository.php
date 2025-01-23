@@ -40,4 +40,20 @@ class TaskRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+    /**
+     * @return Task[]
+     */
+    public function findUserTasksForProject($userId, $projectId)
+    {
+        return $this->createQueryBuilder('t')
+                    ->join('t.users', 'u')
+                    ->where('u.id = :userId')
+                    ->andWhere('t.project = :projectId')
+                    ->setParameter('userId', $userId)
+                    ->setParameter('projectId', $projectId)
+                    ->getQuery()
+                    ->getResult();
+    }
 }

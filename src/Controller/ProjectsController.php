@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\TaskRepository;
+
 
 
 class ProjectsController extends AbstractController
@@ -43,4 +47,40 @@ class ProjectsController extends AbstractController
         return $this->render('projects/test.html.twig', [
         ]);
     }
+
+    #[Route('/tasks/{idProject}/{idUser}', name: 'app_tasks')]
+    public function getUserTasks(Request $request, ManagerRegistry $doctrine, $idUser,$idProject, TaskRepository $repository): Response
+    {
+        $user = $doctrine->getRepository(User::class)->find($idUser);
+        $project = $doctrine->getRepository(Projects::class)->find($idProject);
+        $tasks = $repository->findUserTasksForProject($user->getId(), $project->getId());
+
+        // $tasks = $user->getTasks();
+        dd($tasks);
+        return $this->render('projects/test.html.twig', [
+            'tasks' => $tasks
+        ]);
+    }
+
+    #[Route('/task/{idProject}/{idUser}', name: 'app_task', methods: ['GET'])]
+    public function viewUserTasks(Request $request, ManagerRegistry $doctrine, $idUser, $idProject, TaskRepository $repository): JsonResponse
+    {
+        $user = $doctrine->getRepository(User::class)->find($idUser);
+        $project = $doctrine->getRepository(Projects::class)->find($idProject);
+        $tasks = $repository->findUserTasksForProject($user->getId(), $project->getId());
+
+        // Transformer les tâches en un tableau simple
+        $tasksData = array_map(function ($task) {
+            return [
+                'id' => $task->getId(),
+                'name' => $task->getTitle(),
+                'status' => $task->getStatus(),
+            ];
+        }, $tasks);
+
+        // Retourner une réponse JSON
+        return new JsonResponse(['tasks' => $tasksData]);
+    }
+
+
 }
