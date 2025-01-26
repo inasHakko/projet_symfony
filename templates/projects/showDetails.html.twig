@@ -55,8 +55,9 @@
                                         <img src="{{ member.image }}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                                     </div>
                                     <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm">{{ member.firstName }}</h6>
-                                        <p class="text-xs text-secondary mb-0">{{ member.lastName }}</p>
+                                        <h6 class="mb-0 text-sm">{{ member.firstName }} {{ member.lastName }}</h6>
+                                        {# {{dump(member.getUser())}} #}
+                                        <p class="text-xs text-secondary mb-0">{{member.getUser().getEmail()}}</p>
                                     </div>
                                     </div>
                                 </td>

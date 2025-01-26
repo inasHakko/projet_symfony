@@ -60,6 +60,11 @@ class ProfilController extends AbstractController
         ]);
     }
 
+    #[Route('/profil/test', name: 'app_edit_profil')]
+    public function editProfil(ManagerRegistry $doctrine): Response
+    {
+        return $this->render('profil/test.html.twig');
+    }
 
 
 }
