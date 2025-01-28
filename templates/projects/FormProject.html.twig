@@ -1,0 +1,22 @@
+{% extends 'template.html.twig' %}
+{% block content %}
+    <div class="card p-3 m-4">
+        {{ form_start(form, {'attr' : {'novalidate' : 'novalidate'}}) }}
+        <div class="card-body">
+            {{ form_rest(form) }}
+            
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary" style="background-color:  #F6BB10; border-color:  #F6BB10; color: black;">Add project</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
+{% endblock %}

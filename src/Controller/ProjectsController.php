@@ -12,6 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\TaskRepository;
+use App\Form\ProjectType;
+use App\Service\UploaderService;
 
 
 
@@ -160,5 +162,39 @@ class ProjectsController extends AbstractController
         return new JsonResponse(['message' => 'Task updated successfully!'], Response::HTTP_OK);
     }
 
+    //add new projects
+    #[Route('/project/add', name: 'app_project_add')]
+    public function addPersonne(ManagerRegistry $doctrine, Request $request, UploaderService $uploader): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $project=new Projects();
+        // $personne = new Personne(); 
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->remove('created_at');
+        $form->remove('updated_at');
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            /** @var UploadedFile $brochureFile */
+            $photo = $form->get('photo')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            //  so the PDF file must be processed only when a file is uploaded
+             if ($photo) {
+                 $directory = $this->getParameter('personne_directory');
+                 $project->setImage($uploader->uploadFile($photo,$directory));
+            }
+            $project->setCreatedAt(new \DateTimeImmutable());
+            $project->setUpdatedAt(new \DateTimeImmutable());
+            // $project->setCreatedBy($this->getUser());
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($project);
+            $entityManager->flush();
+            $this->addFlash('success', 'Le project a été ajoutée avec succès!');
+            return $this->redirectToRoute('app_projects');
+        }
+        return $this->render('projects/FormProject.html.twig',['form' => $form->createView()]);
+    }
 }
