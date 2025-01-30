@@ -1,0 +1,50 @@
+{% extends 'template.html.twig' %}
+{% block content %}
+
+
+<div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="mb-4">
+          <div class="card-body text-center">
+            <img src="{{ asset('uploads/brochures/' ~ profil.image)}}" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 200px;height: 200px">
+            <h5 class="my-3">{{profil.firstName}} {{profil.lastName}}</h5>
+            <p class="text-muted mb-1">{{profil.job}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        {{ form_start(form, {'attr' : {'novalidate' : 'novalidate'}}) }}
+            {# <div class="row">
+                <div class="col">{{ form_row(form.firstName) }}</div>
+                <div class="col">{{ form_row(form.lastName) }}</div>
+                <div class="col">{{ form_row(form.job) }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form_row(form.adress) }}</div>
+                <div class="col">{{ form_row(form.phone) }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form_row(form.image) }}</div>
+            </div> #}
+            {# add button edit #}
+            
+        {{ form_rest(form) }}
+        <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
+{% endblock %}

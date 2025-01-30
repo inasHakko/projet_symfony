@@ -18,6 +18,8 @@
 {% block content %}
 <section>
   <div class="container py-5">
+    {# add a button for edit profil à droite de la page #}
+    <a href="{{ path('app_edit_profil', {id: profil.id}) }}" class="btn btn-primary float-right">Edit Profil</a>
     <div class="row">
       <div class="col-lg-4">
         <div class="mb-4">

@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\TaskRepository;
+use App\Form\ProfilType;
+use Symfony\Component\HttpFoundation\Request;
 class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
@@ -66,5 +68,39 @@ class ProfilController extends AbstractController
         return $this->render('profil/test.html.twig');
     }
 
+    //edit profil
+    #[Route('/profil/edit/{id}', name: 'app_edit_profil')]
+    public function editProfilId(ManagerRegistry $doctrine, $id, Request $request): Response
+    {
+        $user = $this->getUser();
+        
+        $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
+                           ->findOneBy(['user' => $user]);
+        $form = $this->createForm(ProfilType::class, $profil);
+        // $form->remove('created_at');
+        // $form->remove('updated_at');
+        $form->remove('user');
+        $form->remove('projects');
+        $form->remove('tasks');
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()){
+            $message ="personne has been updated successfully";
+            $this->addFlash('success', $message);
+            // $profil->setUpdated_at(new \DateTime());
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($profil);
+            $entityManager->flush();
+            $this->addFlash('success', 'Profil modifié avec succès');
+            return $this->redirectToRoute('app_profil');
+        }
+        return $this->render('profil/editProfil.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+            'profil' => $profil
+        ]);
+        
 
+    }
+
+   
 }
