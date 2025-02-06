@@ -60,19 +60,25 @@ class ProjectsController extends AbstractController
         ]);
     }
 
-    // #[Route('/tasks/{idProject}/{idUser}', name: 'app_tasks')]
-    // public function getUserTasks(Request $request, ManagerRegistry $doctrine, $idUser,$idProject, TaskRepository $repository): Response
-    // {
-    //     $user = $doctrine->getRepository(User::class)->find($idUser);
-    //     $project = $doctrine->getRepository(Projects::class)->find($idProject);
-    //     $tasks = $repository->findUserTasksForProject($user->getId(), $project->getId());
+    #[Route('/tasks/{idProject}/{idUser}', name: 'app_tasks',methods: ['GET'])]
+    public function getUserTasks(Request $request, ManagerRegistry $doctrine, $idUser,$idProject, TaskRepository $repository): JsonResponse
+    {
+        $user = $doctrine->getRepository(User::class)->find($idUser);
+        $project = $doctrine->getRepository(Projects::class)->find($idProject);
+        $tasks = $repository->findUserTasksForProject($user->getId(), $project->getId());
 
-    //     // $tasks = $user->getTasks();
-    //     dd($tasks);
-    //     return $this->render('projects/test.html.twig', [
-    //         'tasks' => $tasks
-    //     ]);
-    // }
+        $tasksData = array_map(function ($task) {
+            return [
+                'id' => $task->getId(),
+                'name' => $task->getTitle(),
+                'status' => $task->getStatus(),
+            ];
+        }, $tasks);
+        // dd($tasksData);
+
+        // Retourner une réponse JSON
+        return new JsonResponse(['tasks' => $tasksData]);
+    }
 
     // afficher les taches de chaque memebre
     #[Route('/task/{idProject}/{idUser}', name: 'app_task', methods: ['GET'])]
@@ -106,7 +112,8 @@ class ProjectsController extends AbstractController
 
         return $this->render('projects/projectProgress.html.twig', [
             'project' => $project,
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'idProject' => $project->getId(),
         ]);
     }
 
@@ -196,5 +203,34 @@ class ProjectsController extends AbstractController
             return $this->redirectToRoute('app_projects');
         }
         return $this->render('projects/FormProject.html.twig',['form' => $form->createView()]);
+    }
+
+
+
+    #[Route('/delete-task/{idProject}/{idTask}', name: 'delete_task', methods: ['GET'])]
+    public function deleteTask($idTask,$idProject, ManagerRegistry $doctrine): Response
+    {
+        // Récupérer l'utilisateur depuis la base de données
+        $entityManager = $doctrine->getManager();
+        $task = $doctrine->getRepository(Task::class)->find($idTask);
+        $project = $doctrine->getRepository(Projects::class)->find($idProject);
+        // dd($idProject);
+        // Vérifier si l'utilisateur existe
+        if (!$task) {
+            $this->addFlash('error', 'tâche non trouvé.');
+            return $this->redirectToRoute('app_project_progress',['id' => $idProject]); // Redirige vers la liste des utilisateurs
+        }
+
+        // Supprimer l'utilisateur
+        $entityManager->remove($task);
+        $entityManager->flush();
+
+        // Ajouter un message flash
+        $this->addFlash('success', 'tâche supprimé avec succès.');
+
+        // Rediriger vers la liste des utilisateurs
+        return $this->redirectToRoute('app_project_progress', ['id' => $idProject]);
+        // return $this->redirectToRoute('app_project_progress', ['id' => $project->getId()]);
+
     }
 }

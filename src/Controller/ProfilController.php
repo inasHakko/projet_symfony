@@ -13,6 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\TaskRepository;
 use App\Form\ProfilType;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\UploaderService;
+
 class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
@@ -70,10 +72,9 @@ class ProfilController extends AbstractController
 
     //edit profil
     #[Route('/profil/edit/{id}', name: 'app_edit_profil')]
-    public function editProfilId(ManagerRegistry $doctrine, $id, Request $request): Response
+    public function editProfilId(ManagerRegistry $doctrine, $id, Request $request, UploaderService $uploader): Response
     {
         $user = $this->getUser();
-        
         $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
                            ->findOneBy(['user' => $user]);
         $form = $this->createForm(ProfilType::class, $profil);
@@ -87,6 +88,15 @@ class ProfilController extends AbstractController
             $message ="personne has been updated successfully";
             $this->addFlash('success', $message);
             // $profil->setUpdated_at(new \DateTime());
+            /** @var UploadedFile $brochureFile */
+            $photo = $form->get('image')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($photo) {
+                $directory = $this->getParameter('personne_directory');
+                $profil->setImage($uploader->uploadFile($photo,$directory));
+            }
             $entityManager = $doctrine->getManager();
             $entityManager->persist($profil);
             $entityManager->flush();

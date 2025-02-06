@@ -37,7 +37,11 @@
                         <i class="ni ni-circle-08 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
-                        15
+                        {% if(is_granted('ROLE_ADMIN')) %}
+                          {{nbrAllProjects}}
+                        {% else %}
+                          {{nbrProjectPerso}}
+                        {% endif %}
                       </h5>
                       <span class="text-white text-sm">Nombre de project</span>
                     </div>
@@ -52,7 +56,7 @@
                           <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
                         </ul>
                       </div>
-                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+55%</p>
+                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0 random-percentage" data-random>--%</p>
                     </div>
                   </div>
                 </div>
@@ -68,7 +72,11 @@
                         <i class="ni ni-active-40 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
-                        30
+                        {% if(is_granted('ROLE_ADMIN')) %}
+                          {{allTasksTermine}}
+                        {% else %}
+                          {{taskPersoTermine}}
+                        {% endif %}
                       </h5>
                       <span class="text-white text-sm">Tâches réalisées</span>
                     </div>
@@ -83,7 +91,7 @@
                           <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
                         </ul>
                       </div>
-                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+124%</p>
+                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0 random-percentage" data-random>--%</p>
                     </div>
                   </div>
                 </div>
@@ -101,7 +109,11 @@
                         <i class="ni ni-cart text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
-                        30
+                        {% if(is_granted('ROLE_ADMIN')) %}
+                          {{allTasksRestant}}
+                        {% else %}
+                          {{taskPersoRestant}}
+                        {% endif %}
                       </h5>
                       <span class="text-white text-sm">Tâches restantes</span>
                     </div>
@@ -116,7 +128,7 @@
                           <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
                         </ul>
                       </div>
-                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+15%</p>
+                        <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0 random-percentage" data-random>--%</p>
                     </div>
                   </div>
                 </div>
@@ -132,7 +144,7 @@
                         <i class="ni ni-like-2 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
-                        40
+                        {{nbrMembers}}
                       </h5>
                       <span class="text-white text-sm">Nombre de membres</span>
                     </div>
@@ -147,7 +159,7 @@
                           <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
                         </ul>
                       </div>
-                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0">+90%</p>
+                      <p class="text-white text-sm text-end font-weight-bolder mt-auto mb-0 random-percentage" data-random>--%</p>
                     </div>
                   </div>
                 </div>
@@ -155,66 +167,102 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 col-12 mt-4 mt-lg-0">
-          <div class="card shadow h-100">
-            <div class="card-header pb-0 p-3">
-              <h6 class="mb-0">Reviews</h6>
-            </div>
-            <div class="card-body pb-0 p-3">
-              <ul class="list-group">
-                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-0">
-                  <div class="w-100">
-                    <div class="d-flex mb-2">
-                      <span class="me-2 text-sm font-weight-bold text-dark">Tâches terminées</span>
-                      <span class="ms-auto text-sm font-weight-bold">80%</span>
-                    </div>
-                    <div>
-                      <div class="progress progress-md">
-                        <div class="progress-bar bg-primary w-80" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                  <div class="w-100">
-                    <div class="d-flex mb-2">
-                      <span class="me-2 text-sm font-weight-bold text-dark">Tâches En cours</span>
-                      <span class="ms-auto text-sm font-weight-bold">17%</span>
-                    </div>
-                    <div>
-                      <div class="progress progress-md">
-                        <div class="progress-bar bg-primary w-10" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                  <div class="w-100">
-                    <div class="d-flex mb-2">
-                      <span class="me-2 text-sm font-weight-bold text-dark">Tâches Non commencées</span>
-                      <span class="ms-auto text-sm font-weight-bold">3%</span>
-                    </div>
-                    <div>
-                      <div class="progress progress-md">
-                        <div class="progress-bar bg-primary w-5" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="card-footer pt-0 p-3 d-flex align-items-center">
-              <div class="w-60">
-                {# <p class="text-sm">
-                  More than <b>1,500,000</b> developers used Creative Tim's products and over <b>700,000</b> projects were created.
-                </p> #}
+        {% if(is_granted('ROLE_ADMIN')) %}
+          <div class="col-lg-6 col-12 mt-4 mt-lg-0">
+            <div class="card shadow h-100">
+              <div class="card-header pb-0 p-3">
+                <h6 class="mb-0">Reviews</h6>
               </div>
-              <div class="w-40 text-end">
-                <a class="btn btn-dark mb-0 text-end" href="{{path('app_projects')}}">View Projects</a>
+              <div class="card-body pb-0 p-3">
+                <ul class="list-group">
+                  <li class="list-group-item border-0 d-flex align-items-center px-0 mb-0">
+                    <div class="w-100">
+                      <div class="d-flex mb-2">
+                        <span class="me-2 text-sm font-weight-bold text-dark">Tâches terminées</span>
+                        <span class="ms-auto text-sm font-weight-bold">80%</span>
+                      </div>
+                      <div>
+                        <div class="progress progress-md">
+                          <div class="progress-bar bg-primary w-80" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
+                    <div class="w-100">
+                      <div class="d-flex mb-2">
+                        <span class="me-2 text-sm font-weight-bold text-dark">Tâches En cours</span>
+                        <span class="ms-auto text-sm font-weight-bold">17%</span>
+                      </div>
+                      <div>
+                        <div class="progress progress-md">
+                          <div class="progress-bar bg-primary w-10" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
+                    <div class="w-100">
+                      <div class="d-flex mb-2">
+                        <span class="me-2 text-sm font-weight-bold text-dark">Tâches Non commencées</span>
+                        <span class="ms-auto text-sm font-weight-bold">3%</span>
+                      </div>
+                      <div>
+                        <div class="progress progress-md">
+                          <div class="progress-bar bg-primary w-5" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-footer pt-0 p-3 d-flex align-items-center">
+                <div class="w-60">
+                  {# <p class="text-sm">
+                    More than <b>1,500,000</b> developers used Creative Tim's products and over <b>700,000</b> projects were created.
+                  </p> #}
+                </div>
+                <div class="w-40 text-end">
+                  <a class="btn btn-dark mb-0 text-end" href="{{path('app_projects')}}">View Projects</a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        {% else %}
+          <div class="col-lg-6 col-12 mt-4 mt-lg-0">
+            <div class="card shadow h-100">
+              <div class="card-header pb-0 p-3">
+                <h6 class="mb-0">Reviews tasks</h6>
+              </div>
+              <div class="card-body pb-0 p-3">
+                <ul class="list-group">
+                <ul id="task-list">
+                  {% for task in tasks %}
+                    <li class="list-group-item border-0 d-flex align-items-center px-0 mb-0 task-item"
+                        {% if loop.index > 3 %} style="display: none;" {% endif %}>
+                      <div class="w-100">
+                        <div class="d-flex mb-2">
+                          <span class="me-2 text-sm font-weight-bold text-dark">{{ task.title }}</span>
+                          <span class="ms-auto text-sm font-weight-bold random-percentage" data-random>--%</span>
+                        </div>
+                        <div>
+                          <div class="progress progress-md">
+                            <div class="progress-bar bg-primary progress-bar-random" role="progressbar" aria-valuemin="10" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+                <a  class="btn btn-primary mt-3" href="{{path('app_profil')}}">Voir plus</a>
+              </div>
+              <div class="card-footer pt-0 p-3 d-flex align-items-center">
+                <div class="w-60">
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
       </div>
       <div class="row my-4">
         <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
@@ -223,10 +271,6 @@
               <div class="row">
                 <div class="col-lg-6 col-7">
                   <h6>Projects</h6>
-                  {# <p class="text-sm mb-0">
-                    <i class="fa fa-check text-info" aria-hidden="true"></i>
-                    <span class="font-weight-bold ms-1">30 done</span> this month
-                  </p> #}
                 </div>
                 <div class="col-lg-6 col-5 my-auto text-end">
                   <div class="dropdown float-lg-end pe-4">
@@ -254,46 +298,92 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for project in projects %}
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div>
-                            <img src="{{ asset('uploads/brochures/' ~ project.image)}}" class="avatar avatar-sm me-3" alt="xd">
-                          </div>
-                          <div class="d-flex flex-column justify-content-center">
-                            <a href="{{path('app_project_progress', {id:project.id})}}"><h6 class="mb-0 text-sm">{{project.name}}</h6></a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                      
-                        <div class="avatar-group mt-2">
-                        {% for member in project.getUsers()%}
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{member.firstName}}">
-                            <img src="{{ asset('uploads/brochures/' ~ member.image)}}" style="border-radius:50%;height:30px; width:30px;" alt="team1">
-                          </a>
-                        {% endfor %}
-                        </div>
                     
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> {{project.getTasks().count()}} </span>
-                      </td>
-                      <td class="align-middle">
-                        <div class="progress-wrapper w-75 mx-auto">
-                          <div class="progress-info">
-                            <div class="progress-percentage">
-                              <span class="text-xs font-weight-bold">60%</span>
+                    {% if(is_granted('ROLE_ADMIN')) %}
+                      {% for project in projects %}
+                        <tr>
+                          <td>
+                            <div class="d-flex px-2 py-1">
+                              <div>
+                                <img src="{{ asset('uploads/brochures/' ~ project.image)}}" class="avatar avatar-sm me-3" alt="xd">
+                              </div>
+                              <div class="d-flex flex-column justify-content-center">
+                                <a href="{{path('app_project_progress', {id:project.id})}}">
+                                  <h6 class="mb-0 text-sm">{{ project.name }}</h6>
+                                </a>
+                              </div>
                             </div>
-                          </div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-info w-60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    {% endfor %}
+                          </td>
+                          <td>
+                            <div class="avatar-group mt-2">
+                              {% for member in project.getUsers() %}
+                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ member.firstName }}">
+                                  <img src="{{ asset('uploads/brochures/' ~ member.image)}}" style="border-radius:50%;height:30px; width:30px;" alt="team1">
+                                </a>
+                              {% endfor %}
+                            </div>
+                          </td>
+                          <td class="align-middle text-center text-sm">
+                            <span class="text-xs font-weight-bold"> {{ project.getTasks().count() }} </span>
+                          </td>
+                          <td class="align-middle">
+                            <div class="progress-wrapper w-75 mx-auto">
+                              <div class="progress-info">
+                                <div class="progress-percentage">
+                                  <span class="text-xs font-weight-bold random-percentage" data-random>--%</span>
+                                </div>
+                              </div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-info progress-bar-random" role="progressbar" 
+                                    aria-valuemin="10" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                      {% for project in projectPersonnels %}
+                        <tr>
+                          <td>
+                            <div class="d-flex px-2 py-1">
+                              <div>
+                                <img src="{{ asset('uploads/brochures/' ~ project.image)}}" class="avatar avatar-sm me-3" alt="xd">
+                              </div>
+                              <div class="d-flex flex-column justify-content-center">
+                                <a href="{{path('app_project_progress', {id:project.id})}}">
+                                  <h6 class="mb-0 text-sm">{{ project.name }}</h6>
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="avatar-group mt-2">
+                              {% for member in project.getUsers() %}
+                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ member.firstName }}">
+                                  <img src="{{ asset('uploads/brochures/' ~ member.image)}}" style="border-radius:50%;height:30px; width:30px;" alt="team1">
+                                </a>
+                              {% endfor %}
+                            </div>
+                          </td>
+                          <td class="align-middle text-center text-sm">
+                            <span class="text-xs font-weight-bold"> {{ project.getTasks().count() }} </span>
+                          </td>
+                          <td class="align-middle">
+                            <div class="progress-wrapper w-75 mx-auto">
+                              <div class="progress-info">
+                                <div class="progress-percentage">
+                                  <span class="text-xs font-weight-bold random-percentage" data-random>--%</span>
+                                </div>
+                              </div>
+                              <div class="progress">
+                                <div class="progress-bar bg-gradient-info progress-bar-random" role="progressbar" 
+                                    aria-valuemin="10" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
                   </tbody>
                 </table>
               </div>
@@ -493,6 +583,65 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{ asset('assets_dashboard/js/soft-ui-dashboard.min.js?v=1.1.0') }}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Génère un nombre aléatoire entre 10 et 100
+        function getRandomPercentage() {
+            return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+        }
+
+        // Sélectionne tous les éléments qui doivent recevoir un pourcentage
+        let percentages = document.querySelectorAll(".random-percentage");
+        let progressBars = document.querySelectorAll(".progress-bar-random");
+
+        percentages.forEach((element, index) => {
+            let randomValue = getRandomPercentage();
+            element.textContent = randomValue + "%";
+            progressBars[index].style.width = randomValue + "%"; // Mise à jour de la barre de progression
+        });
+    });
+  </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // Fonction pour générer un nombre aléatoire entre 10 et 100
+      function getRandomPercentage() {
+          return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+      }
+
+      // Sélectionne tous les éléments qui doivent recevoir un pourcentage
+      let percentages = document.querySelectorAll(".random-percentage");
+      let progressBars = document.querySelectorAll(".progress-bar-random");
+
+      percentages.forEach((element, index) => {
+          let randomValue = getRandomPercentage();
+          element.textContent = randomValue + "%"; // Met à jour l'affichage du pourcentage
+          progressBars[index].style.width = randomValue + "%"; // Met à jour la largeur de la barre
+      });
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Fonction pour générer un nombre aléatoire entre 10 et 100
+    function getRandomPercentage() {
+        return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+    }
+
+    // Sélectionne tous les éléments qui doivent recevoir un pourcentage
+    let percentages = document.querySelectorAll(".random-percentage");
+    let progressBars = document.querySelectorAll(".progress-bar-random");
+
+    percentages.forEach((element, index) => {
+        let randomValue = getRandomPercentage();
+        element.textContent = randomValue + "%"; // Met à jour l'affichage du pourcentage
+        progressBars[index].style.width = randomValue + "%"; // Met à jour la largeur de la barre
+    });
+});
+</script>
+
+
+
+
 {% endblock %}
 
 

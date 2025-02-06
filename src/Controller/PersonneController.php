@@ -79,6 +79,7 @@ class PersonneController extends AbstractController
                 $directory = $this->getParameter('personne_directory');
                 $personne->setImage($uploader->uploadFile($photo,$directory));
             }
+            // 17 bis boulevard viivier merle
             $personne->setCreatedAt(new \DateTimeImmutable());
             $personne->setUpdatedAt(new \DateTimeImmutable());
             $personne->setCreatedBy($this->getUser());
@@ -102,7 +103,7 @@ class PersonneController extends AbstractController
     }
 
     #[Route('/edit/{id?0}', name: 'app_personne_edit')]
-    public function editPersonne(ManagerRegistry $doctrine, Request $request, Personne $personne = null , MailerService $mailer, EventDispatcherInterface $dispatcher): Response
+    public function editPersonne(ManagerRegistry $doctrine, Request $request, Personne $personne = null , MailerService $mailer, EventDispatcherInterface $dispatcher, UploaderService $uploader): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -135,6 +136,23 @@ class PersonneController extends AbstractController
             }else{
                 $message ="personne has been updated successfully";
                 $this->addFlash('success', $message);
+            }
+            /** @var UploadedFile $brochureFile */
+            $photo = $form->get('photo')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($photo) {
+                $directory = $this->getParameter('personne_directory');
+                $personne->setImage($uploader->uploadFile($photo,$directory));
+            }/** @var UploadedFile $brochureFile */
+            $photo = $form->get('photo')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($photo) {
+                $directory = $this->getParameter('personne_directory');
+                $personne->setImage($uploader->uploadFile($photo,$directory));
             }
             $entityManager->persist($personne);
             $entityManager->flush();

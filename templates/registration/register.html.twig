@@ -1,14 +1,14 @@
-{% extends 'template.html.twig' %}
+{% extends 'template_login.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}
+<h3 class="font-weight-bolder text-info text-gradient">Welcome, create your account</h3>
+<p class="mb-0">Enter your email and password to sign Up</p>
+{% endblock %}
 
 {% block content %}
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-
-    <h1>Register</h1>
-
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
@@ -18,6 +18,11 @@
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
+        <button class="btn btn-lg mt-2 btn-primary" type="submit">
+        Sign up
+        </button>
     {{ form_end(registrationForm) }}
+{% endblock %}
+{% block url %}
+    <a href="{{path('app_login')}}" class="text-info text-gradient font-weight-bold">Sign in</a>
 {% endblock %}

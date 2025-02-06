@@ -17,7 +17,7 @@
     <body>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" style="color:white;" href="index.html">ORGwork</a>
+            <a class="navbar-brand ps-3" style="color:white;" href="">ORGwork</a>
             <!-- Sidebar Toggle-->
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
@@ -67,7 +67,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Profile
                             </a>
-                            <a class="nav-link" href="{{path('app_profil')}}">
+                            <a class="nav-link" href="{{path('app_members')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Membres table
                             </a>

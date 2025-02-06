@@ -4,59 +4,290 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('assets/styles/js/scripts.js') }}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link id="pagestyle" href="{{ asset('assets/css/material-dashboard.css') }}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
     <div id="layoutSidenav">
             <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Firstname</th>
-                                            <th>Lastname</th>
-                                            <th>Email</th>
-                                            <th>Position</th>
-                                            <th>Téléphone</th>
-                                            {# <th>Salary</th> #}
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Firstname</th>
-                                            <th>Lastname</th>
-                                            <th>Email</th>
-                                            <th>Position</th>
-                                            <th>Téléphone</th>
-                                            {# <th>Salary</th> #}
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                    {% for user in users %}
-                                        <tr>
-                                            <td>{{user.firstName}}</td>
-                                            <td>{{user.lastName}}</td>
-                                            <td>{{user.getUser().email}}</td>
-                                            <td>{{user.job}}</td>
-                                            <td>{{user.phone}}</td>
-                                            {# <td>$320,800</td> #}
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg mt-6 ">
+                    <div class="container-fluid px-4 py-2">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mb-4">
+                                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                                            <h6 class="text-white text-capitalize ps-3">Membre d'équipe</h6>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="datatablesSimple">
+                                            <thead>
+                                                <tr>
+                                                    <th>Firstname</th>
+                                                    <th>Lastname</th>
+                                                    <th>Email</th>
+                                                    <th>Position</th>
+                                                    <th>Téléphone</th>
+                                                    <th>Statut</th>
+                                                    {# <th>edit roles</th> #}
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Firstname</th>
+                                                    <th>Lastname</th>
+                                                    <th>Email</th>
+                                                    <th>Position</th>
+                                                    <th>Téléphone</th>
+                                                    <th>Statut</th>
+                                                    {# <th>edit roles</th> #}
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            {% for user in users %}
+                                                <tr style="border: 3px solid black !important;">
+                                                    <td>{{user.firstName}}</td>
+                                                    <td>{{user.lastName}}</td>
+                                                    <td>{{user.getUser().email}}</td>
+                                                    <td>{{user.job}}</td>
+                                                    <td>{{user.phone}}</td>
+                                                    <td>
+                                                    {% for role in user.getUser().roles %}
+                                                        {% if role == 'ROLE_ADMIN' %}
+                                                            <span class="badge badge-sm bg-gradient-primary">{{role}}</span>
+                                                        {% endif %}
+                                                            {# <p style="font-size:10px !important;">{{role}}</p> #}
+                                                        {% if role == 'ROLE_USER' %}
+                                                            <span class="badge badge-sm bg-gradient-info">{{role}}</span>
+                                                        {% endif %}
+                                                        {% if role == 'ROLE_SUPER_ADMIN' %}
+                                                            <span class="badge badge-sm bg-gradient-danger">{{role}}</span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </td>
+                                                    {% if(is_granted('ROLE_ADMIN')) %}
+                                                    {# <td>
+                                                        <a 
+                                                            href="#" 
+                                                            class="edit-task" 
+                                                            data-id-task="{{ user.getUser().id }}" 
+                                                            data-toggle="modal" 
+                                                            data-target="#editTaskModal">
+                                                            <i class="fas fa-edit"></i> <!-- Icône d'édition -->
+                                                        </a>
+                                                    </td> #}
+                                                    <td>
+                                                        <a href="#" class="delete-task" data-id-task="{{ user.getUser().id }}">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </main>
             </div>
         </div>
+
+
+<!-- edit task Modale -->
+        {# <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTaskModalLabel">Modifier la tâche</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulaire de modification -->
+                        <form id="editTaskForm">
+                            <input type="hidden" id="taskId" name="taskId">
+                            <div class="form-group">
+                                <label for="taskStatus">Role</label>
+                                <select class="form-control" id="taskStatus" name="taskStatus" rows="3">
+                                    <option>ROLE_ADMIN</option>
+                                    <option>ROLE_SUPER_ADMIN</option>
+                                    <option>ROLE_USER</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> #}
+
+        <!-- delete member -->
+        <!-- Modal de confirmation -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteLabel">Confirmation de suppression</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Êtes-vous sûr de vouloir supprimer cet utilisateur ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
 {% endblock %}
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/styles/js/scripts.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/styles/js/datatables-simple-demo.js') }}"></script>
+
+    {# formulaire edit role #}
+    <script>
+        $(document).ready(function () {
+            // Ouvrir la modale avec les données de la tâche
+            $(document).on('click', '.edit-task', function () {
+                const taskId = $(this).data('id-task');
+                //alert(taskId);
+                // Préremplir le formulaire
+                $('#taskId').val(taskId);
+
+                // Afficher la modale
+                $('#editTaskModal').modal('show');
+            });
+
+            // Soumettre les modifications
+            $('#editTaskForm').on('submit', function (e) {
+                e.preventDefault();
+                const taskId = $('#taskId').val();
+
+                // Envoi de la requête AJAX
+                $.ajax({
+                    url: `/userEdit/${taskId}`, // Remplacez par l'URL de votre backend
+                    method: 'PUT', // Méthode PUT pour la mise à jour
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        status: taskStatus
+                    }),
+                    success: function (response) {
+                        // Fermer la modale
+                        $('#editTaskModal').modal('hide');
+                        
+                        // Optionnel : mettre à jour l'interface utilisateur
+                        alert('Rôle mise à jour avec succès !');
+                        location.reload(); // Recharger la page pour refléter les changements
+                    },
+                    error: function (xhr) {
+                        console.error('Erreur lors de la mise à jour de la tâche.');
+                        alert('Une erreur est survenue. Veuillez réessayer.');
+                    }
+                });
+            });
+        });
+
+        $('#editTaskModal').on('hidden.bs.modal', function () {
+            // Réinitialiser tout style personnalisé (si nécessaire)
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        });
+
+
+        {# formulaire delete member #}
+        $(document).ready(function () {
+            // Ouvrir la modale avec les données de la tâche
+            $(document).on('click', '.edit-task', function () {
+                const taskId = $(this).data('id-task');
+
+                // Préremplir le formulaire
+
+                // Afficher la modale
+                $('#editTaskModal').modal('show');
+            });
+
+            // Soumettre les modifications
+            $('#editTaskForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const taskId = $('#taskId').val();
+
+                // Envoi de la requête AJAX
+                $.ajax({
+                    url: `/userDelete/${taskId}`, // Remplacez par l'URL de votre backend
+                    method: 'PUT', // Méthode PUT pour la mise à jour
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        name: taskName,
+                        description: taskDescription,
+                        status: taskStatus
+                    }),
+                    success: function (response) {
+                        // Fermer la modale
+                        $('#editTaskModal').modal('hide');
+                        
+                        // Optionnel : mettre à jour l'interface utilisateur
+                        alert('Tâche mise à jour avec succès !');
+                        location.reload(); // Recharger la page pour refléter les changements
+                    },
+                    error: function (xhr) {
+                        console.error('Erreur lors de la mise à jour de la tâche.');
+                        alert('Une erreur est survenue. Veuillez réessayer.');
+                    }
+                });
+            });
+        });
+
+        $('#editTaskModal').on('hidden.bs.modal', function () {
+            // Réinitialiser tout style personnalisé (si nécessaire)
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        });
+    </script>
+
+    {# delete user #}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".delete-task").forEach(button => {
+                button.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    let userId = this.getAttribute("data-id-task");
+
+                    Swal.fire({
+                        title: "Êtes-vous sûr ?",
+                        text: "Cette action est irréversible !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Oui, supprimer !",
+                        cancelButtonText: "Annuler"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/delete-user/${userId}`; 
+                        }
+                    });
+                });
+            });
+        });
+
+
+    </script>
+
 {% endblock %}

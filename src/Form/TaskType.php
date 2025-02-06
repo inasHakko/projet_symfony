@@ -43,11 +43,32 @@ class TaskType extends AbstractType
                 'placeholder' => 'Sélectionnez un statut', // Optionnel : ajoute une option vide par défaut
                 'required' => true, // Définissez si le champ est obligatoire ou non
             ])
-            ->add('due_date', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Date d’échéance',
-                'attr' => ['class' => 'form-control'],
-            ]);
+            //user 
+            ->add('users', EntityType::class, [
+                'class' => ProfilUser::class,
+                'choice_label' => 'firstName',
+                'multiple' => true,
+                'attr' => [
+                    'class' => 'select2',
+                ]
+                ]);
+            // ->add('project', EntityType::class, [
+            //     'class' => Projects::class,
+            //     'choice_label' => 'name',
+            //     'attr' => ['class' => 'form-control'],
+            // ])
+            // date de début
+            // ->add('start_date', DateType::class, [
+            //     'widget' => 'single_text',
+            //     'label' => 'Date de début',
+            //     'attr' => ['class' => 'form-control'],
+            // ])
+            // date d'échéance
+            // ->add('due_date', DateType::class, [
+            //     'widget' => 'single_text',
+            //     'label' => 'Date d’échéance',
+            //     'attr' => ['class' => 'form-control'],
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
