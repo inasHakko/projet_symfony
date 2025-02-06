@@ -28,7 +28,7 @@ class DashboardController extends AbstractController
         $tasks= $profil->getTasks();
         //récuperer ts les tasks
         
-        $taskTermine = 0;
+        $taskTermine = 0; //les tâches terminées de l'utilisateur
         for ($i=0; $i<count($tasks); $i++) {
             // compter le nombre de tasks terminéés
             $task = $tasks[$i];
@@ -36,10 +36,12 @@ class DashboardController extends AbstractController
                 $taskTermine = $taskTermine +  1;
             }
         }
-        $taskRestant = count($tasks) - $taskTermine;
+
+        $taskRestant = count($tasks) - $taskTermine; //les tâches restantes de l'utilisateur
+
         $entityManager = $doctrine->getManager();
-        $allTasks = $entityManager->getRepository(Task::class)->findAll();
-        $allTasksTermine = 0;
+        $allTasks = $entityManager->getRepository(Task::class)->findAll(); //toute les tâches du projet
+        $allTasksTermine = 0; //toute les tâches finies  de tous les projets
         for ($i=0; $i<count($allTasks); $i++) {
             // compter le nombre de tasks terminéés
             $task = $allTasks[$i];
@@ -47,9 +49,10 @@ class DashboardController extends AbstractController
                 $allTasksTermine = $allTasksTermine +  1;
             }
         }
-        $allTaskRestant = count($allTasks) - $allTasksTermine;
-        $projectsPersonnels = $profil->getProjects();
-        $projects = $entityManager->getRepository(Projects::class)->findAll();
+        $allTaskRestant = count($allTasks) - $allTasksTermine; //toute les tâches restantes  de tous les projets
+
+        $projectsPersonnels = $profil->getProjects(); //ts les projets de l'utilisateur
+        $projects = $entityManager->getRepository(Projects::class)->findAll(); //tous les projets
         $members = $entityManager->getRepository(ProfilUser::class)->findAll();
         return $this->render('dashboard/index.html.twig', [
             'projects' => $projects,

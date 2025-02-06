@@ -18,10 +18,11 @@ class ProfilType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('adress')
-            ->add('phone')
+            ->add('firstName', null, ['label' => 'Prénom'])
+            ->add('lastName', null, ['label' => 'Nom'])
+            ->add('adress', null, ['label' => 'Adresse'])
+            ->add('phone', null, ['label' => 'Téléphone'])
+        
             // ->add('image')
             ->add('image', FileType::class, [
                 'label' => 'votre image de profile (fichier image uniquement)',
@@ -46,7 +47,7 @@ class ProfilType extends AbstractType
                     ])
                 ],
             ])
-            ->add('job')
+            ->add('job', null, ['label'=>'Poste'])
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
