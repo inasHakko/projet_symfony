@@ -3,9 +3,6 @@
 {% block style %}
   <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets_dashboard/img/apple-icon.png') }}">
   <link rel="icon" type="image/png" href="{{ asset('assets_dashboard/img/favicon.png') }}">
-  <title>
-    Soft UI Dashboard 3 by Creative Tim
-  </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -21,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- End Navbar -->
     <div class="container-fluid py-4">
       <div class="row">
@@ -34,7 +31,6 @@
                   <div class="row">
                     <div class="col-8 text-start">
                       <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
-                        <i class="ni ni-circle-08 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
                         {% if(is_granted('ROLE_ADMIN')) %}
@@ -43,7 +39,7 @@
                           {{nbrProjectPerso}}
                         {% endif %}
                       </h5>
-                      <span class="text-white text-sm">Nombre de project</span>
+                      <span class="text-white text-sm">Nombre des projects</span>
                     </div>
                     <div class="col-4">
                       <div class="dropdown text-end mb-6">
@@ -62,6 +58,7 @@
                 </div>
               </div>
             </div>
+
             <div class="col-lg-6 col-md-6 col-12 mt-4 mt-md-0">
               <div class="card">
                 <span class="mask bg-dark opacity-10 border-radius-lg"></span>
@@ -69,7 +66,6 @@
                   <div class="row">
                     <div class="col-8 text-start">
                       <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
-                        <i class="ni ni-active-40 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
                         {% if(is_granted('ROLE_ADMIN')) %}
@@ -98,6 +94,7 @@
               </div>
             </div>
           </div>
+          
           <div class="row mt-4">
             <div class="col-lg-6 col-md-6 col-12">
               <div class="card">
@@ -106,7 +103,6 @@
                   <div class="row">
                     <div class="col-8 text-start">
                       <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
-                        <i class="ni ni-cart text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
                         {% if(is_granted('ROLE_ADMIN')) %}
@@ -134,6 +130,7 @@
                 </div>
               </div>
             </div>
+
             <div class="col-lg-6 col-md-6 col-12 mt-4 mt-md-0">
               <div class="card">
                 <span class="mask bg-dark opacity-10 border-radius-lg"></span>
@@ -141,7 +138,6 @@
                   <div class="row">
                     <div class="col-8 text-start">
                       <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
-                        <i class="ni ni-like-2 text-dark text-gradient text-lg opacity-10" aria-hidden="true"></i>
                       </div>
                       <h5 class="text-white font-weight-bolder mb-0 mt-3">
                         {{nbrMembers}}
@@ -218,9 +214,6 @@
               </div>
               <div class="card-footer pt-0 p-3 d-flex align-items-center">
                 <div class="w-60">
-                  {# <p class="text-sm">
-                    More than <b>1,500,000</b> developers used Creative Tim's products and over <b>700,000</b> projects were created.
-                  </p> #}
                 </div>
                 <div class="w-40 text-end">
                   <a class="btn btn-dark mb-0 text-end" href="{{path('app_projects')}}">View Projects</a>
@@ -229,13 +222,13 @@
             </div>
           </div>
         {% else %}
+
           <div class="col-lg-6 col-12 mt-4 mt-lg-0">
             <div class="card shadow h-100">
               <div class="card-header pb-0 p-3">
-                <h6 class="mb-0">Reviews tasks</h6>
+                <h6 class="mb-0">Reviews tâches</h6>
               </div>
               <div class="card-body pb-0 p-3">
-                <ul class="list-group">
                 <ul id="task-list">
                   {% for task in tasks %}
                     <li class="list-group-item border-0 d-flex align-items-center px-0 mb-0 task-item"
@@ -270,7 +263,7 @@
             <div class="card-header pb-0">
               <div class="row">
                 <div class="col-lg-6 col-7">
-                  <h6>Projects</h6>
+                  <h6>Projets</h6>
                 </div>
                 <div class="col-lg-6 col-5 my-auto text-end">
                   <div class="dropdown float-lg-end pe-4">
@@ -291,14 +284,13 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Projects</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Projets</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Members</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tâches</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Completion</th>
                     </tr>
                   </thead>
                   <tbody>
-                    
                     {% if(is_granted('ROLE_ADMIN')) %}
                       {% for project in projects %}
                         <tr>
@@ -400,176 +392,7 @@
   <script src="{{ asset('assets_dashboard/js/plugins/perfect-scrollbar.min.js') }}"></script>
   <script src="{{ asset('assets_dashboard/js/plugins/smooth-scrollbar.min.js') }}"></script>
   <script src="{{ asset('assets_dashboard/js/plugins/chartjs.min.js') }}"></script>
-  <script>
-    var ctx = document.getElementById("chart-bars").getContext("2d");
 
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-          label: "Sales",
-          tension: 0.4,
-          borderWidth: 0,
-          borderRadius: 4,
-          borderSkipped: false,
-          backgroundColor: "#fff",
-          data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
-          maxBarThickness: 6
-        }, ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-            },
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 500,
-              beginAtZero: true,
-              padding: 15,
-              font: {
-                size: 14,
-                family: "Inter",
-                style: 'normal',
-                lineHeight: 2
-              },
-              color: "#fff"
-            },
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false
-            },
-            ticks: {
-              display: false
-            },
-          },
-        },
-      },
-    });
-
-
-    var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
-
-    new Chart(ctx2, {
-      type: "line",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-            label: "Mobile apps",
-            tension: 0.4,
-            borderWidth: 0,
-            pointRadius: 0,
-            borderColor: "#cb0c9f",
-            borderWidth: 3,
-            backgroundColor: gradientStroke1,
-            fill: true,
-            data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-            maxBarThickness: 6
-
-          },
-          {
-            label: "Websites",
-            tension: 0.4,
-            borderWidth: 0,
-            pointRadius: 0,
-            borderColor: "#3A416F",
-            borderWidth: 3,
-            backgroundColor: gradientStroke2,
-            fill: true,
-            data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-            maxBarThickness: 6
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              padding: 10,
-              color: '#b2b9bf',
-              font: {
-                size: 11,
-                family: "Inter",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              color: '#b2b9bf',
-              padding: 20,
-              font: {
-                size: 11,
-                family: "Inter",
-                style: 'normal',
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-  </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -601,47 +424,42 @@
         });
     });
   </script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-      // Fonction pour générer un nombre aléatoire entre 10 et 100
-      function getRandomPercentage() {
-          return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-      }
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fonction pour générer un nombre aléatoire entre 10 et 100
+        function getRandomPercentage() {
+            return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+        }
 
-      // Sélectionne tous les éléments qui doivent recevoir un pourcentage
-      let percentages = document.querySelectorAll(".random-percentage");
-      let progressBars = document.querySelectorAll(".progress-bar-random");
+        // Sélectionne tous les éléments qui doivent recevoir un pourcentage
+        let percentages = document.querySelectorAll(".random-percentage");
+        let progressBars = document.querySelectorAll(".progress-bar-random");
 
-      percentages.forEach((element, index) => {
-          let randomValue = getRandomPercentage();
-          element.textContent = randomValue + "%"; // Met à jour l'affichage du pourcentage
-          progressBars[index].style.width = randomValue + "%"; // Met à jour la largeur de la barre
-      });
-  });
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Fonction pour générer un nombre aléatoire entre 10 et 100
-    function getRandomPercentage() {
-        return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-    }
-
-    // Sélectionne tous les éléments qui doivent recevoir un pourcentage
-    let percentages = document.querySelectorAll(".random-percentage");
-    let progressBars = document.querySelectorAll(".progress-bar-random");
-
-    percentages.forEach((element, index) => {
-        let randomValue = getRandomPercentage();
-        element.textContent = randomValue + "%"; // Met à jour l'affichage du pourcentage
-        progressBars[index].style.width = randomValue + "%"; // Met à jour la largeur de la barre
+        percentages.forEach((element, index) => {
+            let randomValue = getRandomPercentage();
+            element.textContent = randomValue + "%"; // Met à jour l'affichage du pourcentage
+            progressBars[index].style.width = randomValue + "%"; // Met à jour la largeur de la barre
+        });
     });
-});
-</script>
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fonction pour générer un nombre aléatoire entre 10 et 100
+        function getRandomPercentage() {
+            return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+        }
 
+        // Sélectionne tous les éléments qui doivent recevoir un pourcentage
+        let percentages = document.querySelectorAll(".random-percentage");
+        let progressBars = document.querySelectorAll(".progress-bar-random");
 
-
-
+        percentages.forEach((element, index) => {
+            let randomValue = getRandomPercentage();
+            element.textContent = randomValue + "%"; // Met à jour l'affichage du pourcentage
+            progressBars[index].style.width = randomValue + "%"; // Met à jour la largeur de la barre
+        });
+    });
+  </script>
 {% endblock %}
 
 

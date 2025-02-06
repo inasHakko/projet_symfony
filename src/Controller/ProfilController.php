@@ -21,17 +21,10 @@ class ProfilController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
-        // dd($user);
-        // $project = $user->getProjects();
-
         // Récupérer le profil associé à l'utilisateur
         $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
                            ->findOneBy(['user' => $user]);
-        // dd($profil->getUser()->getId());
         $projects = $profil->getProjects();
-        // Vérifier le contenu des objets récupérés
-        // dd($user, $profil);
-
         return $this->render('profil/index.html.twig', [
             'user' => $user,
             'profil' => $profil,
@@ -50,24 +43,13 @@ class ProfilController extends AbstractController
         $user = $this->getUser();
         $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
                            ->findOneBy(['user' => $user]);
-        // $email = $user->getEmail();
-        // $user = new User();
-        // dd($user);
         // Récupérer les tâches de l'utilisateur pour le projet sélectionné
         $tasks = $repository->findUserTasksForProject($profil->getId(), $project->getId());
-        // dd($tasks);
-
         return $this->render('profil/projectDetails.html.twig', [
             'project' => $project,
             'tasks' => $tasks,
             'user' => $user
         ]);
-    }
-
-    #[Route('/profil/test', name: 'app_edit_profil')]
-    public function editProfil(ManagerRegistry $doctrine): Response
-    {
-        return $this->render('profil/test.html.twig');
     }
 
     //edit profil
@@ -78,8 +60,7 @@ class ProfilController extends AbstractController
         $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
                            ->findOneBy(['user' => $user]);
         $form = $this->createForm(ProfilType::class, $profil);
-        // $form->remove('created_at');
-        // $form->remove('updated_at');
+        //supprimer les champs qu'on n'a pas besoin
         $form->remove('user');
         $form->remove('projects');
         $form->remove('tasks');
@@ -90,9 +71,6 @@ class ProfilController extends AbstractController
             // $profil->setUpdated_at(new \DateTime());
             /** @var UploadedFile $brochureFile */
             $photo = $form->get('image')->getData();
-
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($photo) {
                 $directory = $this->getParameter('personne_directory');
                 $profil->setImage($uploader->uploadFile($photo,$directory));
@@ -108,8 +86,6 @@ class ProfilController extends AbstractController
             'user' => $user,
             'profil' => $profil
         ]);
-        
-
     }
 
    
