@@ -8,203 +8,190 @@
 {% endblock %}
 {% block content %}
     <div class="card">
-            <div class="card-body">
-                <h3 class="card-title mb-2">Project name : {{project.name}}</h3>
-                {# <h6 class="card-subtitle">globe type chair for rest</h6> #}
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-6">
-                        <div class="white-box text-center"><img src="{{ asset('uploads/brochures/' ~ project.image)}}" class="img-responsive"></div>
-                    </div>
-                    <div class="col-lg-7 col-md-7 col-sm-6">
-                        <h4 class="box-title mt-5">Project description</h4>
-                        <p>{{project.description}}</p>
-                        {# <h3 class="box-title mt-5">Project managers : </h3>
-                        <ul class="list-unstyled">
-                            <li><i class="fa fa-check text-success"></i>Manager 1</li>
-                            <li><i class="fa fa-check text-success"></i>Manager 2</li>
-                        </ul> #}
-                    </div>
+        <div class="card-body">
+            <h3 class="card-title mb-2">Project name : {{project.name}}</h3>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    <div class="white-box text-center"><img src="{{ asset('uploads/brochures/' ~ project.image)}}" class="img-responsive"></div>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <h4 class="box-title mt-5">Project description</h4>
+                    <p>{{project.description}}</p>
                 </div>
             </div>
-            
-        </div>
-        <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg mt-4 ">
-            <div class="container-fluid py-2">
+        </div>    
+    </div>
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg mt-4 ">
+        <div class="container-fluid py-2">
             <div class="row">
                 <div class="col-12">
-                <div class="card my-4">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                        <h6 class="text-white text-capitalize ps-3">Project tasks</h6>
-                        {% if(is_granted('ROLE_ADMIN')) %}
-                        <div class="position-absolute top-0 end-0 p-3">
-                            <a href="{{path('app_task_add', {id:project.id})}}" class="btn btn-sm btn-primary" style="background-color:  #F6BB10; border-color:  #F6BB10; color: black;">Add new task</a>
-                        </div>
-                        {% endif %}
-                    </div>
-                    </div>
-                    <div class="card-body px-0 pb-2">
-                    <div class="table-responsive p-0">
-                        <table class="table align-items-center mb-0">
-                        <thead>
-                            <tr style="border:1px">
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Task</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Manager</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                            {% if(is_granted('ROLE_ADMIN')) %}
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Edit</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delete</th>
-                            {% endif %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for task in tasks %}
-                            <tr>
-                                <td>
-                                    <div class="d-flex px-2 py-1">
-                                    {# <div>
-                                        <img src="{{ member.image }}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                                    </div> #}
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm">{{ task.title }}</h6>
-                                        <p class="text-xs text-secondary mb-0">{{ task.description }}</p>
-                                    </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle text-center text-sm">
-                                    {# <p class="text-xs font-weight-bold mb-0">{{ member.job }}</p> #}
-                                    <button 
-                                        class="badge badge-sm bg-gradient-primary view-tasks" 
-                                        data-id-task="{{ task.id }}" 
-                                        data-toggle="modal" 
-                                        data-target="#tasksModal">
-                                        View managers
-                                    </button>
-                                </td>
-                                <td class="align-middle text-center text-sm">
-                                    {% if task.status == 'En cours' %}
-                                    <span class="badge badge-sm bg-gradient-warning">{{task.status}}</span>
-                                    {% elseif task.status == 'Terminée' %}
-                                    <span class="badge badge-sm bg-gradient-success">{{task.status}}</span>
-                                    {% elseif task.status == 'En attente' %}
-                                    <span class="badge badge-sm bg-gradient-info">{{task.status}}</span>
-                                    {% elseif task.status == 'Non commencé' %}
-                                    <span class="badge badge-sm bg-gradient-danger">{{task.status}}</span>
-                                    {% endif %}
-                                </td>
+                    <div class="card my-4">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                                <h6 class="text-white text-capitalize ps-3">Tâche du projet</h6>
                                 {% if(is_granted('ROLE_ADMIN')) %}
-                                <td class="align-middle text-center text-sm">
-                                    <a 
-                                        href="#" 
-                                        class="edit-task" 
-                                        data-id-task="{{ task.id }}" 
-                                        
-                                        data-toggle="modal" 
-                                        data-target="#editTaskModal">
-                                        <i class="fas fa-edit"></i> <!-- Icône d'édition -->
-                                    </a>
-                                </td>
-                                <td class="align-middle text-center text-sm">
-                                    <a href="#" class="delete-task" data-id-task="{{ task.id }}" data-id-project="{{project.id }}" >
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
+                                    <div class="position-absolute top-0 end-0 p-3">
+                                        <a href="{{path('app_task_add', {id:project.id})}}" class="btn btn-sm btn-primary" style="background-color:  #F6BB10; border-color:  #F6BB10; color: black;">Nouvelle tâche</a>
+                                    </div>
                                 {% endif %}
-
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr style="border:1px">
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tâche</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Responsable</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Statut</th>
+                                            {% if(is_granted('ROLE_ADMIN')) %}
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Modifier</th>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supprimer</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task in tasks %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ task.title }}</h6>
+                                                        <p class="text-xs text-secondary mb-0">{{ task.description }}</p>
+                                                    </div>
+                                                    </div>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <button 
+                                                        class="badge badge-sm bg-gradient-primary view-tasks" 
+                                                        data-id-task="{{ task.id }}" 
+                                                        data-toggle="modal" 
+                                                        data-target="#tasksModal">
+                                                        View Responsables
+                                                    </button>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    {% if task.status == 'En cours' %}
+                                                    <span class="badge badge-sm bg-gradient-warning">{{task.status}}</span>
+                                                    {% elseif task.status == 'Terminée' %}
+                                                    <span class="badge badge-sm bg-gradient-success">{{task.status}}</span>
+                                                    {% elseif task.status == 'En attente' %}
+                                                    <span class="badge badge-sm bg-gradient-info">{{task.status}}</span>
+                                                    {% elseif task.status == 'Non commencé' %}
+                                                    <span class="badge badge-sm bg-gradient-danger">{{task.status}}</span>
+                                                    {% endif %}
+                                                </td>
+                                                {% if(is_granted('ROLE_ADMIN')) %}
+                                                    <td class="align-middle text-center text-sm">
+                                                        <a 
+                                                            href="#" 
+                                                            class="edit-task" 
+                                                            data-id-task="{{ task.id }}" 
+                                                            data-toggle="modal" 
+                                                            data-target="#editTaskModal">
+                                                            <i class="fas fa-edit"></i> <!-- Icône d'édition -->
+                                                        </a>
+                                                    </td>
+                                                    <td class="align-middle text-center text-sm">
+                                                        <a href="#" class="delete-task" data-id-task="{{ task.id }}" data-id-project="{{project.id }}" >
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Tasks Modal -->
+    <div class="modal fade" id="tasksModal" tabindex="-1" role="dialog" aria-labelledby="tasksModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tasksModalLabel">Responsables de la tâche</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <div class="d-flex flex-column justify-content-center" id="tasksList">
+                        </div>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
-            </div>
-        </main>
+        </div>
+    </div>
 
-        <!-- Tasks Modal -->
-        <div class="modal fade" id="tasksModal" tabindex="-1" role="dialog" aria-labelledby="tasksModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="tasksModalLabel">Task managers</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <!-- edit task Modale -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Modifier la tâche</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul>
-                            <div class="d-flex flex-column justify-content-center" id="tasksList">
-                            {# add ur block here #}
-                            </div>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulaire de modification -->
+                    <form id="editTaskForm">
+                        <input type="hidden" id="taskId" name="taskId">
+                        <div class="form-group">
+                            <label for="taskStatus">Statut</label>
+                            <select class="form-control" id="taskStatus" name="taskStatus" rows="3">
+                                <option>En cours</option>
+                                <option>Terminée</option>
+                                <option>En attente</option>
+                                <option>Non commencé</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- edit task Modale -->
-        <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editTaskModalLabel">Modifier la tâche</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Formulaire de modification -->
-                        <form id="editTaskForm">
-                            <input type="hidden" id="taskId" name="taskId">
-                            <div class="form-group">
-                                <label for="taskStatus">Status</label>
-                                <select class="form-control" id="taskStatus" name="taskStatus" rows="3">
-                                    <option>En cours</option>
-                                    <option>Terminée</option>
-                                    <option>En attente</option>
-                                    <option>Non commencé</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-                        </form>
-                    </div>
+
+    <!-- delete member -->
+    <!-- Modal de confirmation -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Confirmation de suppression</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer cette tâche ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Supprimer</a>
                 </div>
             </div>
         </div>
-
-
-        <!-- delete member -->
-        <!-- Modal de confirmation -->
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteLabel">Confirmation de suppression</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Êtes-vous sûr de vouloir supprimer cette tâche ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Supprimer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {# scripts  #}
-        <script src="{{ asset('assets/js/material-dashboard.min.js') }}"></script>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/js/material-dashboard.min.js') }}"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
         $(document).on('click', '.view-tasks', function () {
             const idTask = $(this).data('id-task'); // Assurez-vous que 'data-id-task' est utilisé dans l'attribut HTML.
             const url = `/taskManager/${idTask}`;
@@ -322,9 +309,8 @@
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
         });
-        </script>
-
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".delete-task").forEach(button => {

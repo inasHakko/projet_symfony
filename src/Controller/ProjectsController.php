@@ -36,27 +36,10 @@ class ProjectsController extends AbstractController
     {
         $project = $doctrine->getRepository(\App\Entity\Projects::class)
                            ->find($id);
-
         $members = $project->getUsers();
-        // $profil = $members->getUser();
-        // dd($profil);
-        // dd($members);
         return $this->render('projects/showDetails.html.twig', [
             'project' => $project,
             'project_members' => $members
-        ]);
-    }
-
-    #[Route('/test', name: 'app_test')]
-    public function test(): Response
-    {
-        // Obtenir la date actuelle
-        $date = new \DateTime();
-
-        // Transmettre le mois et le jour au template
-        return $this->render('projects/test.html.twig', [
-            'currentMonth' => $date->format('F'), // Mois complet (ex: January)
-            'currentDay' => $date->format('j'),  // Jour du mois (ex: 24)
         ]);
     }
 
@@ -74,8 +57,6 @@ class ProjectsController extends AbstractController
                 'status' => $task->getStatus(),
             ];
         }, $tasks);
-        // dd($tasksData);
-
         // Retourner une réponse JSON
         return new JsonResponse(['tasks' => $tasksData]);
     }
@@ -87,7 +68,6 @@ class ProjectsController extends AbstractController
         $user = $doctrine->getRepository(User::class)->find($idUser);
         $project = $doctrine->getRepository(Projects::class)->find($idProject);
         $tasks = $repository->findUserTasksForProject($user->getId(), $project->getId());
-        // dd($tasks);
         // Transformer les tâches en un tableau simple
         $tasksData = array_map(function ($task) {
             return [
@@ -96,8 +76,6 @@ class ProjectsController extends AbstractController
                 'status' => $task->getStatus(),
             ];
         }, $tasks);
-        // dd($tasksData);
-
         // Retourner une réponse JSON
         return new JsonResponse(['tasks' => $tasksData]);
     }
@@ -186,9 +164,6 @@ class ProjectsController extends AbstractController
         {
             /** @var UploadedFile $brochureFile */
             $photo = $form->get('photo')->getData();
-
-            // this condition is needed because the 'brochure' field is not required
-            //  so the PDF file must be processed only when a file is uploaded
              if ($photo) {
                  $directory = $this->getParameter('personne_directory');
                  $project->setImage($uploader->uploadFile($photo,$directory));
@@ -214,7 +189,6 @@ class ProjectsController extends AbstractController
         $entityManager = $doctrine->getManager();
         $task = $doctrine->getRepository(Task::class)->find($idTask);
         $project = $doctrine->getRepository(Projects::class)->find($idProject);
-        // dd($idProject);
         // Vérifier si l'utilisateur existe
         if (!$task) {
             $this->addFlash('error', 'tâche non trouvé.');
@@ -230,7 +204,6 @@ class ProjectsController extends AbstractController
 
         // Rediriger vers la liste des utilisateurs
         return $this->redirectToRoute('app_project_progress', ['id' => $idProject]);
-        // return $this->redirectToRoute('app_project_progress', ['id' => $project->getId()]);
 
     }
 }
