@@ -21,15 +21,33 @@ class ProfilController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
+
         // Récupérer le profil associé à l'utilisateur
         $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
                            ->findOneBy(['user' => $user]);
-        $projects = $profil->getProjects();
-        return $this->render('profil/index.html.twig', [
-            'user' => $user,
-            'profil' => $profil,
-            'projects' => $projects
-        ]);
+        if($profil){
+            $projects = $profil->getProjects();
+            return $this->render('profil/index.html.twig', [
+                'user' => $user,
+                'profil' => $profil,
+                'projects' => $projects
+            ]);
+        } else {
+            //remplir les champs de profil avec des valeurs vide
+            $profil = new ProfilUser();
+            $profil->setUser($user);
+            $profil->setFirstName('');
+            $profil->setLastName('');
+            $profil->setPhone('');
+            $profil->setJob('');
+            $profil->setAdress('');
+            return $this->render('profil/index.html.twig', [
+                'user' => $user,
+                'profil' => $profil,
+                'projects' => []
+            ]);
+        }
+        
     }
 
     #[Route('/profil/project_Details/{id}', name: 'app_project_detaills')]

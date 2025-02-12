@@ -111,8 +111,6 @@
         $(document).on('click', '.view-tasks', function () {
             const userId = $(this).data('id-user');
             const projectId = $(this).data('id-project');
-            alert(userId);
-            alert(projectId);
             // URL de la route
             const url = `/tasks/${projectId}/${userId}`;
             // Effectuer une requête AJAX
@@ -130,7 +128,9 @@
                             badgeClass = 'bg-gradient-success';
                         } else if (task.status === 'En attente'){
                             badgeClass = 'bg-gradient-info';
-                        };
+                        } else if (task.status === 'Non commencé') {
+                            badgeClass = 'bg-gradient-danger';
+                        }
                         $('#tasksList').append(`
                             <p class="mb-0 w-100 d-flex justify-content-between">
                                 <span class="font-italic me-1">${task.name}</span>

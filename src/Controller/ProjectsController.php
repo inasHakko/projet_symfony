@@ -43,6 +43,7 @@ class ProjectsController extends AbstractController
         ]);
     }
 
+    //retrouver les tâches du user avec son id dans un projet avec son id
     #[Route('/tasks/{idProject}/{idUser}', name: 'app_tasks',methods: ['GET'])]
     public function getUserTasks(Request $request, ManagerRegistry $doctrine, $idUser,$idProject, TaskRepository $repository): JsonResponse
     {

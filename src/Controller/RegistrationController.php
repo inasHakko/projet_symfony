@@ -17,7 +17,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-
+use App\Entity\ProfilUser;
 class RegistrationController extends AbstractController
 {
     public function __construct(private EmailVerifier $emailVerifier)
@@ -39,6 +39,15 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
+            // Création automatique du profil
+            $profil = new ProfilUser();
+            $profil->setUser($user);
+            $profil->setFirstName('');
+            $profil->setLastName('');
+            $profil->setPhone('');
+            $profil->setJob('');
+            $profil->setAdress('');
+            $entityManager->persist($profil);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
@@ -80,6 +89,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_dashboard');
+        return $this->redirectToRoute('app_edit_profil', ['id' => $user->getId()]);
     }
 }

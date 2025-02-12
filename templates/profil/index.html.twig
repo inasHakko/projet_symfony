@@ -110,11 +110,11 @@
                             </p>
                             <div class="d-flex align-items-center justify-content-between">
                               <a  href="{{path('app_project_detaills', {id:project.id})}}">
-                                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Projet & tâches</button>
+                                  <button type="button" class="btn btn-outline-primary btn-sm mb-0">Projet & tâches</button>
                               </a>
                               <div class="avatar-group mt-2">
                               {% for member in project.getUsers()%}
-                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
+                                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{member.firstName}}">
                                   <img alt="Image placeholder" src="{{ asset('uploads/brochures/' ~ member.image)}}" style="border-radius:50%;height:30px; width:30px;">
                                 </a>
                               {% endfor %}

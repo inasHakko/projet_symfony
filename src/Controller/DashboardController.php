@@ -25,8 +25,11 @@ class DashboardController extends AbstractController
         $user = $this->getUser();
         $profil = $doctrine->getRepository(\App\Entity\ProfilUser::class)
                            ->findOneBy(['user' => $user]);
+        if ($profil) {
         $tasks= $profil->getTasks();
         //récuperer ts les tasks
+
+        //une condition qui vérifie si la variable $tasks est non null
         
         $taskTermine = 0; //les tâches terminées de l'utilisateur
         for ($i=0; $i<count($tasks); $i++) {
@@ -38,7 +41,7 @@ class DashboardController extends AbstractController
         }
 
         $taskRestant = count($tasks) - $taskTermine; //les tâches restantes de l'utilisateur
-
+        
         $entityManager = $doctrine->getManager();
         $allTasks = $entityManager->getRepository(Task::class)->findAll(); //toute les tâches du projet
         $allTasksTermine = 0; //toute les tâches finies  de tous les projets
@@ -69,6 +72,24 @@ class DashboardController extends AbstractController
             'allTasksRestant' => $allTaskRestant,
             'nbrAllProjects' => count($allTasks),
         ]);
+    } else {
+        return $this->render('dashboard/index.html.twig', [
+            'projects' => [],
+            'projectPersonnels' => [],
+            'tasks' => [],
+            'user' => $user,
+            'profil' => $profil,
+            'members' => [],
+            'taskPersoTermine' => 0,
+            'taskPersoRestant' => 0,
+            'nbrProjectPerso' => 0,
+            'nbrMembers' => 0,
+            'allTasksTermine' => 0,
+            'allTasksRestant' => 0,
+            'nbrAllProjects' => 0,
+        ]);
+
+    }
     }
 
 }
