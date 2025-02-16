@@ -41,7 +41,7 @@
                                                     {% endif %}
                                                 </tr>
                                             </thead>
-                                            {# <tfoot>
+                                            <tfoot>
                                                 <tr>
                                                     <th>Firstname</th>
                                                     <th>Lastname</th>
@@ -51,7 +51,7 @@
                                                     <th>Statut</th>
                                                     <th>Delete</th>
                                                 </tr>
-                                            </tfoot> #}
+                                            </tfoot>
                                             <tbody>
                                                 {% for user in users %}
                                                     <tr>
@@ -225,12 +225,13 @@
     {# delete user #}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        {# document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".delete-task").forEach(button => {
                 button.addEventListener("click", function (e) {
+                    
                     e.preventDefault();
                     let userId = this.getAttribute("data-id-task");
-
+                    alert("hi");
                     Swal.fire({
                         title: "Êtes-vous sûr ?",
                         text: "Cette action est irréversible !",
@@ -247,9 +248,27 @@
                     });
                 });
             });
+        }); #}
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".delete-task")) {
+                e.preventDefault();
+                let userId = e.target.closest(".delete-task").getAttribute("data-id-task");
+                Swal.fire({
+                    title: "Êtes-vous sûr ?",
+                    text: "Cette action est irréversible !",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Oui, supprimer !",
+                    cancelButtonText: "Annuler"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/delete-user/${userId}`; 
+                    }
+                });
+            }
         });
-
-
     </script>
 
 {% endblock %}
