@@ -1,5 +1,12 @@
 {% extends 'template.html.twig' %}
 {% block style %}
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Détails de projet {{project.name}}</title>
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets_dashboard/img/apple-icon.png') }}">
+  <link rel="icon" type="image/png" href="{{ asset('assets_dashboard/img/favicon.png') }}">
   <link id="pagestyle" href="{{ asset('assets/css/material-dashboard.css') }}" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
@@ -25,9 +32,9 @@
                             <table class="table table-striped table-product">
                                 <tbody>
                                     <tr>
-                                        <td width="390">Tâche</td>
-                                        <td>Description</td>
-                                        <td>Statut</td>
+                                        <td width="390"  style="font-weight:bold !important;">Tâche</td>
+                                        <td  style="font-weight:bold !important;">Description</td>
+                                        <td  style="font-weight:bold !important;">Statut</td>
                                     </tr>
                                     {% for task in tasks %}
                                         <tr>

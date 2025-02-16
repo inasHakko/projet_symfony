@@ -1,5 +1,13 @@
 {% extends 'template.html.twig' %}
-
+{% block style %}
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>projets</title>
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets_dashboard/img/apple-icon.png') }}">
+  <link rel="icon" type="image/png" href="{{ asset('assets_dashboard/img/favicon.png') }}">
+{% endblock %}
 {% block content %}
   <div class="main-content position-relative max-height-vh-100 h-100 mb-2">
     <div class="container-fluid px-2 px-md-4">

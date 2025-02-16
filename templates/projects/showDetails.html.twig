@@ -1,5 +1,12 @@
 {% extends 'template.html.twig' %}
 {% block style %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Membre du projet {{project.name}}</title>
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets_dashboard/img/apple-icon.png') }}">
+  <link rel="icon" type="image/png" href="{{ asset('assets_dashboard/img/favicon.png') }}">
   <link id="pagestyle" href="{{ asset('assets/css/material-dashboard.css') }}" rel="stylesheet" />
 {% endblock %}
 {% block content %}
@@ -35,9 +42,9 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Membre</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Function</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tâches</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supprimer</th>
-                                        <th class="text-secondary opacity-7"></th>
-                                        </tr>
+                                        {% if(is_granted('ROLE_ADMIN')) %}
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supprimer</th>
+                                        {% endif %}
                                     </thead>
                                     <tbody>
                                         {% for member in project_members %}
@@ -66,9 +73,13 @@
                                                         View tâches
                                                     </button>
                                                 </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <span class="badge badge-sm bg-gradient-warning">Show profil</span>
-                                                </td>
+                                                    {% if(is_granted('ROLE_ADMIN')) %}
+                                                    <td class="align-middle text-center text-sm">
+                                                        <a href="#" class="delete-task" data-id-task="{{ member.id }}" data-id-project="{{project.id }}" >
+                                                            <i class="fas fa-trash" style="color:red !important;"></i>
+                                                        </a>
+                                                    </td>
+                                                    {% endif %}
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -100,6 +111,31 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- delete member -->
+    <!-- Modal de confirmation -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Confirmation de suppression</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer cette personne de ce projet ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
 
 {% block javascripts %}
@@ -156,6 +192,40 @@
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
         });
+
+    </script>
+
+    <!-- Delete member -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".delete-task").forEach(button => {
+                button.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    //alert("Task deleted");
+                    let userId = this.getAttribute("data-id-task");
+                    //project id
+                    //let projectId = this.getAttribute("data-id-project");
+                    const projectId = $(this).data('id-project');
+                    Swal.fire({
+                        title: "Êtes-vous sûr ?",
+                        text: "Cette action est irréversible !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Oui, supprimer !",
+                        cancelButtonText: "Annuler"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/delete-member/${projectId}/${userId}`; 
+                        }
+                    });
+                });
+            });
+        });
+
 
     </script>
 {% endblock %}

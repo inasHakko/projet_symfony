@@ -5,6 +5,7 @@ use App\Entity\ProfilUser;
 use App\Entity\User;
 use App\Entity\Projects;
 use App\Entity\Task;
+use App\Form\AddMemberType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -207,4 +208,112 @@ class ProjectsController extends AbstractController
         return $this->redirectToRoute('app_project_progress', ['id' => $idProject]);
 
     }
+
+    // delete member from the project
+    #[Route('/delete-member/{idProject}/{idUser}', name: 'delete_member', methods: ['GET'])]
+    public function deleteMember($idUser,$idProject, ManagerRegistry $doctrine): Response
+    {
+        // Récupérer l'utilisateur depuis la base de données
+        $entityManager = $doctrine->getManager();
+        $user = $doctrine->getRepository(ProfilUser::class)->find($idUser);
+        $project = $doctrine->getRepository(Projects::class)->find($idProject);
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            $this->addFlash('error', 'Utilisateur non trouvé.');
+            return $this->redirectToRoute('app_project_showDetails',['id' => $idProject]); // Redirige vers la liste des utilisateurs
+        }
+
+        // Supprimer l'utilisateur
+        $project->removeUser($user);
+        $entityManager->persist($project);
+        $entityManager->flush();
+
+        // Ajouter un message flash
+        $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+
+        // Rediriger vers la liste des utilisateurs
+        return $this->redirectToRoute('app_project_showDetails',['id' => $idProject]); // Redirige vers la liste des utilisateurs
+
+    }
+
+    // form to add member to the project
+    // #[Route('/add-member/{idProject}', name: 'add_member_to_project', methods: ['GET', 'POST'])]
+    // public function addMemberToProject($idProject, Request $request, ManagerRegistry $doctrine): Response
+    // {
+    //     $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    //     $project = $doctrine->getRepository(Projects::class)->find($idProject);
+    //     $form = $this->createForm(ProjectType::class, $project);
+    //     $form->remove('name');
+    //     $form->remove('description');
+    //     $form->remove('photo');
+    //     $form->remove('created_at');
+    //     $form->remove('updated_at');
+
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid())
+    //     {
+    //         $entityManager = $doctrine->getManager();
+    //         $user = $form->get('user')->getData();
+    //         $project->addUser($user);
+    //         $entityManager->persist($project);
+    //         $entityManager->flush();
+    //         $this->addFlash('success', 'Utilisateur ajouté avec succès!');
+    //         return $this->redirectToRoute('app_project_showDetails',['idProject' => $idProject]);
+    //     }
+    //     return $this->render('projects/addNewMember.html.twig',['form' => $form->createView()]);
+
+    // }
+
+    // #[Route('/add-member/{idProject}', name: 'add_member_to_project', methods: ['GET', 'POST'])]
+    // public function addMemberToProject($idProject, Request $request, ManagerRegistry $doctrine): Response
+    // {
+    //     $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+    //     $entityManager = $doctrine->getManager();
+    //     $project = $entityManager->getRepository(Projects::class)->find($idProject);
+
+    //     if (!$project) {
+    //         throw $this->createNotFoundException('Projet non trouvé.');
+    //     }
+
+    //     // Récupérer uniquement les tâches du projet
+    //     $tasks = $entityManager->getRepository(Task::class)->findBy(['project' => $project]);
+
+    //     // Créer le formulaire
+    //     $form = $this->createForm(AddMemberType::class);
+        
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $user = $form->get('users')->getData();
+    //         $selectedTasks = $form->get('tasks')->getData(); // Tâches sélectionnées
+
+    //         if (!$user) {
+    //             $this->addFlash('error', 'Veuillez sélectionner un utilisateur.');
+    //             return $this->redirectToRoute('add_member_to_project', ['idProject' => $idProject]);
+    //         }
+
+    //         // Ajouter l'utilisateur au projet
+    //         $project->addUser($user);
+
+    //         // Assigner les tâches sélectionnées à cet utilisateur
+    //         foreach ($selectedTasks as $task) {
+    //             $task->addUser($user);
+    //             $entityManager->persist($task);
+    //         }
+
+    //         $entityManager->persist($project);
+    //         $entityManager->flush();
+
+    //         $this->addFlash('success', 'Utilisateur ajouté avec succès !');
+    //         return $this->redirectToRoute('app_project_showDetails', ['idProject' => $idProject]);
+    //     }
+
+    //     return $this->render('projects/addNewMember.html.twig', [
+    //         'form' => $form->createView(),
+    //     ]);
+    // }
+
+
 }

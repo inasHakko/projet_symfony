@@ -1,6 +1,12 @@
 {% extends 'template.html.twig' %}
 
 {% block style %}
+    <title>Membre d'équipes</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link href="{{ asset('assets/styles/css/styles.css') }}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('assets/styles/js/scripts.js') }}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,16 +30,18 @@
                                         <table id="datatablesSimple">
                                             <thead>
                                                 <tr>
-                                                    <th>Firstname</th>
-                                                    <th>Lastname</th>
+                                                    <th>Prénom</th>
+                                                    <th>Nom</th>
                                                     <th>Email</th>
-                                                    <th>Position</th>
+                                                    <th>Poste</th>
                                                     <th>Téléphone</th>
                                                     <th>Statut</th>
-                                                    <th>Delete</th>
+                                                    {% if(is_granted('ROLE_ADMIN')) %}
+                                                    <th>Supprimer</th>
+                                                    {% endif %}
                                                 </tr>
                                             </thead>
-                                            <tfoot>
+                                            {# <tfoot>
                                                 <tr>
                                                     <th>Firstname</th>
                                                     <th>Lastname</th>
@@ -43,10 +51,10 @@
                                                     <th>Statut</th>
                                                     <th>Delete</th>
                                                 </tr>
-                                            </tfoot>
+                                            </tfoot> #}
                                             <tbody>
                                                 {% for user in users %}
-                                                    <tr style="border: 3px solid black !important;">
+                                                    <tr>
                                                         <td>{{user.firstName}}</td>
                                                         <td>{{user.lastName}}</td>
                                                         <td>{{user.getUser().email}}</td>

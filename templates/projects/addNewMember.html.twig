@@ -4,24 +4,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Ajouter une tâche</title>
+  <title>Ajouter un member</title>
   <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets_dashboard/img/apple-icon.png') }}">
   <link rel="icon" type="image/png" href="{{ asset('assets_dashboard/img/favicon.png') }}">
 {% endblock %}
 {% block content %}
     <div class="card p-3 m-4">
         {{ form_start(form, {'attr' : {'novalidate' : 'novalidate'}}) }}
-        
-        <div class="row">
-                <div class="col">{{ form_row(form.status) }}</div>
-                <div class="col">{{ form_row(form.title) }}</div>
-        </div>
         <div class="card-body">
             {{ form_rest(form) }}
             
         </div>
         <div class="text-end">
-            <button type="submit" class="btn btn-primary" style="background-color:  #F6BB10; border-color:  #F6BB10; color: black;">Ajouter une tâche</button>
+            <button type="submit" class="btn btn-primary" style="background-color:  #F6BB10; border-color:  #F6BB10; color: black;">Ajouter un member</button>
         </div>
         {{ form_end(form) }}
     </div>
